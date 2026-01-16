@@ -1,7 +1,7 @@
 import logging
 import os
 from datetime import datetime
-from config.settings import LOG_DIR
+from scripts.config.settings import LOG_DIR
 
 
 def get_logger(name="mcg"):
