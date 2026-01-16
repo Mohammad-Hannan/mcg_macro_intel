@@ -2,10 +2,7 @@ import json
 from datetime import datetime
 
 # Constants
-from config.settings import (
-    DEFAULT_ACTION,
-    REGIME_UNCLEAR
-)
+from scripts.config.settings import DEFAULT_ACTION, REGIME_UNCLEAR
 
 # Logger
 from scripts.logger import get_logger
