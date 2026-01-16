@@ -1,30 +1,46 @@
 import json
 from datetime import datetime
 
+# Constants
 from config.settings import (
     DEFAULT_ACTION,
     REGIME_UNCLEAR
 )
 
+# Logger
 from scripts.logger import get_logger
-
 logger = get_logger("daily_pipeline")
 
-# Core modules
-from btc_client import (
+# Core BTC modules
+from scripts.btc_client import (
     fetch_btc_history,
     compute_moving_averages,
     compute_vol_regime
 )
-from etf_client import fetch_etf_flows, compute_flow_regime
-from funding_client import fetch_funding_rates, classify_funding
-from decision_engine import decide_action
-from pmi_client import (
+
+# ETF flows
+from scripts.etf_client import (
+    fetch_etf_flows,
+    compute_flow_regime
+)
+
+# Funding
+from scripts.funding_client import (
+    fetch_funding_rates,
+    classify_funding
+)
+
+# Decision engine
+from scripts.decision_engine import decide_action
+
+# PMI / Macro
+from scripts.pmi_client import (
     load_pmi_data,
     compute_pmi_metrics,
     classify_macro_regime
 )
 
+# Output writer
 from scripts.output_writer import write_daily_output
 
 
@@ -45,7 +61,7 @@ def get_macro_regime():
         return regime, metrics
 
     except Exception as e:
-        print("PMI error, defaulting macro regime:", e)
+        logger.warning(f"PMI error, defaulting macro regime: {e}")
         return REGIME_UNCLEAR, None
 
 
@@ -71,7 +87,7 @@ def run_daily_pipeline():
         etf_df = fetch_etf_flows()
         etf_flow_regime = compute_flow_regime(etf_df)
     except Exception as e:
-        print("ETF flow error:", e)
+        logger.warning(f"ETF flow error: {e}")
         etf_flow_regime = "mixed"
 
     # --- Funding ---
@@ -79,7 +95,7 @@ def run_daily_pipeline():
         funding_df = fetch_funding_rates()
         funding_regime = classify_funding(funding_df)
     except Exception as e:
-        print("Funding error:", e)
+        logger.warning(f"Funding error: {e}")
         funding_regime = "neutral"
 
     # --- PMI / Macro ---
@@ -96,7 +112,7 @@ def run_daily_pipeline():
             funding_regime=funding_regime
         )
     except Exception as e:
-        print("Decision engine error:", e)
+        logger.error(f"Decision engine error: {e}")
         final_action = DEFAULT_ACTION
 
     # --- Final Output ---
