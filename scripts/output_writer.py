@@ -1,17 +1,28 @@
 import json
-import os
-from datetime import datetime
-from config.settings import OUTPUT_DIR, DATE_FORMAT
+from pathlib import Path
 
+OUTPUT_DIR = Path("outputs")
+PUBLIC_DIR = Path("public/daily")
 
-def write_daily_output(data: dict):
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+OUTPUT_DIR.mkdir(exist_ok=True)
+PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
 
-    date_str = data["date"]
-    filename = f"mcg_daily_{date_str}.json"
-    path = os.path.join(OUTPUT_DIR, filename)
+def write_daily_output(data):
+    date = data["date"]
 
-    with open(path, "w") as f:
+    # Internal archive
+    internal_path = OUTPUT_DIR / f"mcg_daily_{date}.json"
+
+    # Public endpoint
+    public_path = PUBLIC_DIR / "latest.json"
+
+    with open(internal_path, "w") as f:
         json.dump(data, f, indent=2)
 
-    return path
+    with open(public_path, "w") as f:
+        json.dump(data, f, indent=2)
+
+    return {
+        "internal": str(internal_path),
+        "public": str(public_path)
+    }
