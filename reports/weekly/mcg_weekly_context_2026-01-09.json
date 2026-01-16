@@ -1,0 +1,17 @@
+{
+  "week_ending": "2026-01-09",
+  "macro_regime": "REGIME_UNCLEAR",
+  "btc_structure": {
+    "above_50dma": "yes",
+    "above_200dma": "no",
+    "volatility": "low"
+  },
+  "institutional_flows": {
+    "etf_flow_regime": "negative"
+  },
+  "funding": {
+    "funding_regime": "neutral"
+  },
+  "final_action": "HOLD",
+  "days_included": 3
+}

@@ -1,0 +1,16 @@
+{
+  "date": "2026-01-07",
+  "macro_regime": "MID_EXPANSION",
+  "btc_structure": {
+    "above_50dma": "yes",
+    "above_200dma": "no",
+    "volatility": "low"
+  },
+  "institutional_flows": {
+    "etf_flow_regime": "negative"
+  },
+  "funding": {
+    "funding_regime": "neutral"
+  },
+  "final_action": "HOLD"
+}

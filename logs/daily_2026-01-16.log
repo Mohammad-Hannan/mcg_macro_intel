@@ -1,0 +1,4 @@
+2026-01-16 20:51:18,010 | INFO | Starting daily pipeline
+2026-01-16 20:51:21,640 | INFO | Final action: HOLD
+2026-01-16 20:51:21,640 | INFO | Output written to outputs/mcg_daily_2026-01-16.json
+2026-01-16 20:51:21,640 | INFO | Daily pipeline completed successfully
