@@ -1,15 +1,13 @@
-name: Run MCG Daily Pipeline
+name: Daily MCG Pipeline
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: "0 6 * * *"
+  workflow_dispatch:
 
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
       - uses: actions/checkout@v4
@@ -23,14 +21,14 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Run pipeline
+      - name: Run daily pipeline
         run: |
-          python -m scripts.daily_pipeline
+          python scripts/daily_pipeline.py
 
       - name: Commit outputs
         run: |
           git config user.name "mcg-bot"
-          git config user.email "bot@mcg.local"
-          git add outputs
-          git commit -m "Daily MCG Intelligence update" || echo "No changes"
+          git config user.email "bot@mcg.ai"
+          git add outputs/
+          git commit -m "Daily MCG update" || echo "No changes"
           git push
