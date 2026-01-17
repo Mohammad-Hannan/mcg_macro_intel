@@ -85,7 +85,7 @@
   </footer>
 
 <script>
-fetch("daily/latest.json")
+fetch("/mcg_macro_intel/daily/latest.json")
   .then(res => res.json())
   .then(data => {
     const table = document.getElementById("signal-table");
