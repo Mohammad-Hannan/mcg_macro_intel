@@ -23,7 +23,7 @@ jobs:
 
       - name: Run daily pipeline
         run: |
-          python scripts/daily_pipeline.py
+          python -m scripts.daily_pipeline
 
       - name: Commit outputs
         run: |

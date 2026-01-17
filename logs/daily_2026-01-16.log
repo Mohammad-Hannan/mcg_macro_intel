@@ -1,9 +1,0 @@
-2026-01-16 20:51:18,010 | INFO | Starting daily pipeline
-2026-01-16 20:51:21,640 | INFO | Final action: HOLD
-2026-01-16 20:51:21,640 | INFO | Output written to outputs/mcg_daily_2026-01-16.json
-2026-01-16 20:51:21,640 | INFO | Daily pipeline completed successfully
-2026-01-16 16:17:55,210 | INFO | Starting daily pipeline
-2026-01-16 16:17:55,543 | WARNING | Funding error: 451 Client Error:  for url: https://fapi.binance.com/fapi/v1/fundingRate?symbol=BTCUSDT&limit=30
-2026-01-16 16:17:55,548 | INFO | Final action: HOLD
-2026-01-16 16:17:55,548 | INFO | Output written to outputs/mcg_daily_2026-01-16.json
-2026-01-16 16:17:55,548 | INFO | Daily pipeline completed successfully
