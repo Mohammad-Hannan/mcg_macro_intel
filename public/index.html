@@ -1,166 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MCG Daily Intelligence</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>MCG Intelligence – Daily Signal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      background-color: #0e1117;
-      color: #e6edf3;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
       margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 880px;
-      margin: 40px auto;
-      padding: 24px;
+      padding: 40px;
     }
 
     h1 {
-      font-size: 28px;
       margin-bottom: 8px;
     }
 
-    h2 {
-      font-size: 18px;
-      margin-top: 32px;
-      margin-bottom: 12px;
-      color: #9da7b3;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 30px;
     }
 
-    .meta {
-      font-size: 14px;
-      color: #9da7b3;
-      margin-bottom: 24px;
+    .card {
+      background: #020617;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 720px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
-
-    .action-box {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 24px 0;
-    }
-
-    .action {
-      font-size: 32px;
-      font-weight: 700;
-      margin-top: 6px;
-    }
-
-    .hold { color: #f0b90b; }
-    .add { color: #3fb950; }
-    .trim { color: #f85149; }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: #161b22;
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 12px;
     }
 
-    th, td {
-      padding: 14px 16px;
-      text-align: left;
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #1e293b;
     }
 
-    th {
-      background: #0d1117;
-      font-size: 13px;
-      color: #9da7b3;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
+    td.label {
+      color: #94a3b8;
+      width: 40%;
     }
 
-    tr {
-      border-bottom: 1px solid #30363d;
+    td.value {
+      font-weight: 600;
     }
 
-    tr:last-child {
-      border-bottom: none;
+    .action {
+      font-size: 20px;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 16px;
     }
 
-    .summary {
-      background: #0d1117;
-      border-left: 4px solid #58a6ff;
-      padding: 16px;
-      margin-top: 28px;
-      font-size: 15px;
-      line-height: 1.5;
-    }
+    .ADD { background: #065f46; color: #ecfdf5; }
+    .HOLD { background: #1e40af; color: #eff6ff; }
+    .TRIM { background: #7c2d12; color: #fff7ed; }
 
     footer {
-      margin-top: 48px;
-      font-size: 13px;
-      color: #9da7b3;
-      text-align: center;
+      margin-top: 20px;
+      color: #64748b;
+      font-size: 12px;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
+  <h1>MCG Intelligence</h1>
+  <div class="subtitle">Daily Macro + BTC Signal</div>
 
-    <h1>MCG Daily Intelligence</h1>
-    <div class="meta">Bitcoin Macro Signal • 16 January 2026</div>
-
-    <div class="action-box">
-      <div>System Action</div>
-      <div class="action hold">HOLD</div>
-    </div>
-
-    <h2>Market Snapshot</h2>
-    <table>
-      <tr>
-        <th>Component</th>
-        <th>Status</th>
-      </tr>
-      <tr>
-        <td>Macro Regime (PMI)</td>
-        <td>Mid Expansion</td>
-      </tr>
-      <tr>
-        <td>BTC Trend (50DMA)</td>
-        <td>Above</td>
-      </tr>
-      <tr>
-        <td>BTC Trend (200DMA)</td>
-        <td>Below</td>
-      </tr>
-      <tr>
-        <td>Volatility Regime</td>
-        <td>Low</td>
-      </tr>
-      <tr>
-        <td>ETF Flows (7-day)</td>
-        <td>Negative</td>
-      </tr>
-      <tr>
-        <td>Funding</td>
-        <td>Neutral</td>
-      </tr>
-    </table>
-
-    <div class="summary">
-      <strong>Interpretation:</strong><br>
-      Macro conditions remain constructive, but momentum is slowing.
-      Institutional flows continue to act as a headwind.
-      With volatility contained and structure mixed, the system recommends
-      maintaining current exposure rather than adding risk.
-    </div>
-
-    <footer>
-      Market Capital Group • Quantitative Intelligence System (Phase I)
-    </footer>
-
+  <div class="card">
+    <table id="signal-table"></table>
+    <div id="action"></div>
   </div>
+
+  <footer>
+    Data updates daily · Phase 1 MVP
+  </footer>
+
+<script>
+fetch("daily/latest.json")
+  .then(res => res.json())
+  .then(data => {
+    const table = document.getElementById("signal-table");
+
+    const rows = [
+      ["Date", data.date],
+      ["Macro Regime", data.macro_regime],
+      ["Above 50 DMA", data.btc_structure.above_50dma],
+      ["Above 200 DMA", data.btc_structure.above_200dma],
+      ["Volatility", data.btc_structure.volatility],
+      ["ETF Flows", data.institutional_flows.etf_flow_regime],
+      ["Funding", data.funding.funding_regime],
+      ["PMI Trend", data.pmi?.pmi_trend || "N/A"]
+    ];
+
+    rows.forEach(r => {
+      table.innerHTML += `
+        <tr>
+          <td class="label">${r[0]}</td>
+          <td class="value">${r[1]}</td>
+        </tr>`;
+    });
+
+    const action = document.getElementById("action");
+    action.className = "action " + data.final_action;
+    action.innerText = "Final Action: " + data.final_action;
+  })
+  .catch(() => {
+    document.getElementById("signal-table").innerHTML =
+      "<tr><td>Error loading signal data</td></tr>";
+  });
+</script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MCG Intelligence – Daily Signal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 720px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    td.label {
+      color: #94a3b8;
+      width: 40%;
+    }
+
+    td.value {
+      font-weight: 600;
+    }
+
+    .action {
+      font-size: 20px;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-top: 16px;
+    }
+
+    .ADD { background: #065f46; color: #ecfdf5; }
+    .HOLD { background: #1e40af; color: #eff6ff; }
+    .TRIM { background: #7c2d12; color: #fff7ed; }
+
+    footer {
+      margin-top: 20px;
+      color: #64748b;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>MCG Intelligence</h1>
+  <div class="subtitle">Daily Macro + BTC Signal</div>
+
+  <div class="card">
+    <table id="signal-table"></table>
+    <div id="action"></div>
+  </div>
+
+  <footer>
+    Data updates daily · Phase 1 MVP
+  </footer>
+
+<script>
+fetch("latest.json")
+  .then(res => res.json())
+  .then(data => {
+    const table = document.getElementById("signal-table");
+
+    const rows = [
+      ["Date", data.date],
+      ["Macro Regime", data.macro_regime],
+      ["Above 50 DMA", data.btc_structure.above_50dma],
+      ["Above 200 DMA", data.btc_structure.above_200dma],
+      ["Volatility", data.btc_structure.volatility],
+      ["ETF Flows", data.institutional_flows.etf_flow_regime],
+      ["Funding", data.funding.funding_regime],
+      ["PMI Trend", data.pmi?.pmi_trend || "N/A"]
+    ];
+
+    rows.forEach(r => {
+      table.innerHTML += `
+        <tr>
+          <td class="label">${r[0]}</td>
+          <td class="value">${r[1]}</td>
+        </tr>`;
+    });
+
+    const action = document.getElementById("action");
+    action.className = "action " + data.final_action;
+    action.innerText = "Final Action: " + data.final_action;
+  })
+  .catch(() => {
+    document.getElementById("signal-table").innerHTML =
+      "<tr><td>Error loading signal data</td></tr>";
+  });
+</script>
+
 </body>
 </html>
