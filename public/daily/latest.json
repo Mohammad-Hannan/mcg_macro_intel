@@ -2,7 +2,7 @@
   "date": "2026-01-20",
   "macro_regime": "REGIME_UNCLEAR",
   "btc_structure": {
-    "above_50dma": "yes",
+    "above_50dma": "no",
     "above_200dma": "no",
     "volatility": "low"
   },
