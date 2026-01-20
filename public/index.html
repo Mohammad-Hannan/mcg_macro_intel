@@ -85,7 +85,7 @@
   </footer>
 
 <script>
-fetch("/mcg_macro_intel/daily/latest.json")
+fetch("/public/daily/latest.json")
   .then(res => res.json())
   .then(data => {
     const table = document.getElementById("signal-table");
@@ -207,7 +207,7 @@ fetch("/mcg_macro_intel/daily/latest.json")
   </footer>
 
 <script>
-fetch("latest.json")
+fetch("/public/daily/latest.json")
   .then(res => res.json())
   .then(data => {
     const table = document.getElementById("signal-table");
