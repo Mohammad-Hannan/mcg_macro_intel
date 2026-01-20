@@ -29,6 +29,6 @@ jobs:
         run: |
           git config user.name "mcg-bot"
           git config user.email "bot@mcg.ai"
-          git add outputs/
+          git add public/daily/latest.json
           git commit -m "Daily MCG update" || echo "No changes"
           git push
