@@ -86,9 +86,15 @@
 
 <script>
 fetch("./daily/latest.json")
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) {
+      throw new Error("HTTP " + res.status);
+    }
+    return res.json();
+  })
   .then(data => {
     const table = document.getElementById("signal-table");
+    table.innerHTML = "";
 
     const rows = [
       ["Date", data.date],
@@ -101,11 +107,11 @@ fetch("./daily/latest.json")
       ["PMI Trend", data.pmi?.pmi_trend || "N/A"]
     ];
 
-    rows.forEach(r => {
+    rows.forEach(([label, value]) => {
       table.innerHTML += `
         <tr>
-          <td class="label">${r[0]}</td>
-          <td class="value">${r[1]}</td>
+          <td class="label">${label}</td>
+          <td class="value">${value}</td>
         </tr>`;
     });
 
@@ -113,7 +119,8 @@ fetch("./daily/latest.json")
     action.className = "action " + data.final_action;
     action.innerText = "Final Action: " + data.final_action;
   })
-  .catch(() => {
+  .catch(err => {
+    console.error("Dashboard load error:", err);
     document.getElementById("signal-table").innerHTML =
       "<tr><td>Error loading signal data</td></tr>";
   });
@@ -121,125 +128,3 @@ fetch("./daily/latest.json")
 
 </body>
 </html><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>MCG Intelligence – Daily Signal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <style>
-    body {
-      font-family: Inter, system-ui, -apple-system, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      margin: 0;
-      padding: 40px;
-    }
-
-    h1 {
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      color: #9ca3af;
-      margin-bottom: 30px;
-    }
-
-    .card {
-      background: #020617;
-      border-radius: 12px;
-      padding: 24px;
-      max-width: 720px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    td {
-      padding: 12px 8px;
-      border-bottom: 1px solid #1e293b;
-    }
-
-    td.label {
-      color: #94a3b8;
-      width: 40%;
-    }
-
-    td.value {
-      font-weight: 600;
-    }
-
-    .action {
-      font-size: 20px;
-      font-weight: 700;
-      padding: 10px 16px;
-      border-radius: 8px;
-      display: inline-block;
-      margin-top: 16px;
-    }
-
-    .ADD { background: #065f46; color: #ecfdf5; }
-    .HOLD { background: #1e40af; color: #eff6ff; }
-    .TRIM { background: #7c2d12; color: #fff7ed; }
-
-    footer {
-      margin-top: 20px;
-      color: #64748b;
-      font-size: 12px;
-    }
-  </style>
-</head>
-
-<body>
-  <h1>MCG Intelligence</h1>
-  <div class="subtitle">Daily Macro + BTC Signal</div>
-
-  <div class="card">
-    <table id="signal-table"></table>
-    <div id="action"></div>
-  </div>
-
-  <footer>
-    Data updates daily · Phase 1 MVP
-  </footer>
-
-<script>
-fetch("./daily/latest.json")
-  .then(res => res.json())
-  .then(data => {
-    const table = document.getElementById("signal-table");
-
-    const rows = [
-      ["Date", data.date],
-      ["Macro Regime", data.macro_regime],
-      ["Above 50 DMA", data.btc_structure.above_50dma],
-      ["Above 200 DMA", data.btc_structure.above_200dma],
-      ["Volatility", data.btc_structure.volatility],
-      ["ETF Flows", data.institutional_flows.etf_flow_regime],
-      ["Funding", data.funding.funding_regime],
-      ["PMI Trend", data.pmi?.pmi_trend || "N/A"]
-    ];
-
-    rows.forEach(r => {
-      table.innerHTML += `
-        <tr>
-          <td class="label">${r[0]}</td>
-          <td class="value">${r[1]}</td>
-        </tr>`;
-    });
-
-    const action = document.getElementById("action");
-    action.className = "action " + data.final_action;
-    action.innerText = "Final Action: " + data.final_action;
-  })
-  .catch(() => {
-    document.getElementById("signal-table").innerHTML =
-      "<tr><td>Error loading signal data</td></tr>";
-  });
-</script>
-
-</body>
-</html>
