@@ -121,7 +121,7 @@
   </div>
 
 <script>
-fetch("./daily/latest.json")
+fetch("./daily/latest.json?ts=" + Date.now())
   .then(res => res.json())
   .then(data => {
     const table = document.getElementById("signal-table");
@@ -136,6 +136,7 @@ fetch("./daily/latest.json")
       ["Funding Regime", data.funding.funding_regime],
       ["PMI Trend", data.pmi?.pmi_trend || "N/A"]
     ];
+
 
     rows.forEach(([label, value]) => {
       table.innerHTML += `
