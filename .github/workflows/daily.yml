@@ -29,6 +29,14 @@ jobs:
         run: |
           python -m scripts.daily_pipeline
 
+      - name: Send daily email
+        continue-on-error: true
+        run: python scripts/send_email.py
+        env:
+         SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+         EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+         EMAIL_TO: ${{ secrets.EMAIL_TO }}
+
       - name: Commit and push public output
         run: |
           git config user.name "mcg-bot"
