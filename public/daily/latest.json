@@ -1,10 +1,10 @@
 {
-  "date": "2026-02-06",
+  "date": "2026-02-07",
   "macro_regime": "REGIME_UNCLEAR",
   "btc_structure": {
     "above_50dma": "no",
     "above_200dma": "no",
-    "volatility": "low"
+    "volatility": "high"
   },
   "institutional_flows": {
     "etf_flow_regime": "negative"
