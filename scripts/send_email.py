@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+from datetime import datetime
 
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
 EMAIL_FROM = os.getenv("EMAIL_FROM")
@@ -8,40 +9,92 @@ EMAIL_TO = os.getenv("EMAIL_TO").split(",")
 
 LATEST_JSON = "public/daily/latest.json"
 
+
 def load_signal():
     with open(LATEST_JSON, "r") as f:
         return json.load(f)
 
+
 def build_email(data):
-    subject = f"MCG Daily Signal — {data['final_action']} ({data['date']})"
+    # ---- Extract fields safely ----
+    date = data.get("date")
+    macro = data.get("macro_regime")
+    final_action = data.get("final_action")
+    shock_mode = data.get("shock_mode", False)
+    weekend_mode = data.get("weekend_mode", False)
 
+    btc = data.get("btc_structure", {})
+    flows = data.get("institutional_flows", {})
+    funding = data.get("funding", {})
+    pmi = data.get("pmi", {})
+    fg = data.get("fear_greed", {})
+    tactical = data.get("tactical_bias", "TACTICAL_HOLD")
+
+    # ---- Formatting helpers ----
+    shock_text = "🚨 SHOCK MODE ACTIVE" if shock_mode else "Normal"
+    weekend_text = "Yes" if weekend_mode else "No"
+
+    fg_value = fg.get("value", "N/A")
+    fg_class = fg.get("classification", "N/A")
+
+    # ---- Subject ----
+    subject = f"MCG Intelligence — {final_action} | {date}"
+
+    # ---- Body ----
     body = f"""
-MCG Intelligence — Daily Signal
+MCG INTELLIGENCE SYSTEM — DAILY UPDATE
+Date: {date}
 
-Date: {data['date']}
-Macro Regime: {data['macro_regime']}
+==================================================
+CORE DECISION
+==================================================
+Final Action: {final_action}
+Macro Regime: {macro}
+Shock Mode: {shock_text}
+Weekend Mode: {weekend_text}
 
-BTC Structure
-- Above 50 DMA: {data['btc_structure']['above_50dma']}
-- Above 200 DMA: {data['btc_structure']['above_200dma']}
-- Volatility: {data['btc_structure']['volatility']}
+==================================================
+BTC MARKET STRUCTURE
+==================================================
+Above 50DMA: {btc.get('above_50dma')}
+Above 200DMA: {btc.get('above_200dma')}
+Volatility Regime: {btc.get('volatility')}
 
-Institutional Flows
-- ETF Flow Regime: {data['institutional_flows']['etf_flow_regime']}
+==================================================
+INSTITUTIONAL FLOWS
+==================================================
+ETF Flow Regime: {flows.get('etf_flow_regime')}
+Funding Regime: {funding.get('funding_regime')}
 
-Funding
-- Funding Regime: {data['funding']['funding_regime']}
+==================================================
+SENTIMENT OVERLAY
+==================================================
+Fear & Greed Index: {fg_value} ({fg_class})
+Tactical Bias: {tactical}
 
-PMI
-- 3M Avg: {data['pmi'].get('pmi_3m_avg')}
-- Trend: {data['pmi'].get('pmi_trend')}
+==================================================
+MACRO CONTEXT (PMI)
+==================================================
+PMI: {pmi.get('pmi')}
+PMI 3M Average: {pmi.get('pmi_3m_avg')}
+PMI Trend: {pmi.get('pmi_trend')}
 
-FINAL ACTION: {data['final_action']}
+==================================================
+SYSTEM PRINCIPLES
+==================================================
+• Macro defines permission
+• Market structure defines timing
+• Sentiment accelerates — never overrides
+• Shock logic activates separately
+
+This is a decision-support system, not a trading bot.
 """
     return subject, body
 
+
 def send_email(subject, body):
     url = "https://api.sendgrid.com/v3/mail/send"
+
     headers = {
         "Authorization": f"Bearer {SENDGRID_API_KEY}",
         "Content-Type": "application/json"
@@ -62,8 +115,9 @@ def send_email(subject, body):
     r = requests.post(url, headers=headers, json=payload)
     r.raise_for_status()
 
+
 if __name__ == "__main__":
     data = load_signal()
     subject, body = build_email(data)
     send_email(subject, body)
-    print("Email sent successfully")
+    print("Email sent successfully.")
