@@ -36,12 +36,3 @@ jobs:
          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-
-      - name: Commit and push public output
-        run: |
-          git config user.name "mcg-bot"
-          git config user.email "mcg-bot@users.noreply.github.com"
-
-          git add public/daily/latest.json
-          git commit -m "Daily MCG Intelligence update" || echo "No changes to commit"
-          git push
