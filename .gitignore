@@ -9,3 +9,5 @@ outputs/
 # Environment files
 *.env
 venv/
+
+public/daily/
