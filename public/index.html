@@ -3,82 +3,50 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MCG Intelligence System</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>MCG Intelligence Dashboard</title>
 
 <style>
 :root {
-  --bg: #0f172a;
-  --card: #1e293b;
-  --text: #e2e8f0;
-  --muted: #94a3b8;
-  --green: #22c55e;
-  --yellow: #f59e0b;
-  --red: #ef4444;
-  --border: #334155;
-}
+  --bg-dark: #0f1115;
+  --card-dark: #161a22;
+  --text-dark: #e6e9ef;
+  --muted-dark: #9aa3b2;
 
-.light-mode {
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --text: #0f172a;
-  --muted: #475569;
-  --border: #e2e8f0;
+  --green: #2ecc71;
+  --yellow: #f1c40f;
+  --red: #e74c3c;
 }
 
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  transition: 0.3s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
 }
 
 .container {
   max-width: 1100px;
-  margin: auto;
-  padding: 40px 20px;
+  margin: 60px auto;
+  padding: 20px;
 }
 
 h1 {
-  text-align: center;
   font-weight: 600;
-  margin-bottom: 40px;
+  letter-spacing: 0.5px;
 }
 
 .card {
-  background: var(--card);
-  padding: 24px;
-  border-radius: 12px;
-  margin-bottom: 24px;
-  border: 1px solid var(--border);
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeIn 0.6s ease forwards;
+  background: var(--card-dark);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.section-title {
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.row:last-child {
-  border-bottom: none;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
 }
 
 .badge {
@@ -86,147 +54,173 @@ h1 {
   border-radius: 6px;
   font-weight: 600;
   font-size: 13px;
+  display: inline-block;
 }
 
-.green { background: var(--green); color: white; }
-.yellow { background: var(--yellow); color: white; }
-.red { background: var(--red); color: white; }
+.green { background: rgba(46,204,113,0.2); color: var(--green); }
+.yellow { background: rgba(241,196,15,0.2); color: var(--yellow); }
+.red { background: rgba(231,76,60,0.2); color: var(--red); }
 
-.confidence-bar {
-  height: 10px;
-  border-radius: 6px;
-  background: var(--border);
-  overflow: hidden;
-  margin-top: 10px;
+.label {
+  font-size: 13px;
+  color: var(--muted-dark);
+  margin-bottom: 6px;
 }
 
-.confidence-fill {
-  height: 100%;
-  transition: width 0.6s ease;
+.value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
   cursor: pointer;
-  font-size: 14px;
-  background: var(--card);
-  padding: 8px 14px;
+  padding: 6px 12px;
   border-radius: 6px;
-  border: 1px solid var(--border);
+  background: #2a2f3a;
+  font-size: 12px;
 }
 
-@media print {
-  body { background: white; color: black; }
-  .toggle { display: none; }
-  .card { box-shadow: none; }
+.light-mode {
+  background: #f5f6fa;
+  color: #111;
+}
+
+.light-mode .card {
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 </style>
 </head>
-
 <body>
 
-<div class="toggle" onclick="toggleMode()">Toggle Theme</div>
-
 <div class="container">
-  <h1>MCG Intelligence System</h1>
 
-  <div id="dashboard"></div>
+  <div class="top-bar">
+    <h1>MCG Intelligence</h1>
+    <div class="toggle" onclick="toggleTheme()">Toggle Theme</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Date</div>
+    <div class="value" id="date"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">Final Action</div>
+    <div class="value" id="final-action"></div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="label">Macro Regime</div>
+      <div class="value" id="macro"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Shock Mode</div>
+      <div id="shock"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Weekend Mode</div>
+      <div id="weekend"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">BTC Structure</div>
+      <div id="structure"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">ETF Flow Regime</div>
+      <div class="value" id="etf"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Funding Regime</div>
+      <div class="value" id="funding"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Fear & Greed</div>
+      <div id="fg"></div>
+    </div>
+
+    <div class="card">
+      <div class="label">Tactical Bias</div>
+      <div class="value" id="tactical"></div>
+    </div>
+
+  </div>
+
 </div>
 
 <script>
-function toggleMode() {
-  document.body.classList.toggle("light-mode");
-}
-
-function getRiskClass(action) {
-  if (action === "ADD") return "green";
-  if (action === "TRIM") return "red";
+function riskColor(value) {
+  if (value === "ADD") return "green";
+  if (value === "TRIM") return "red";
   return "yellow";
 }
 
-function confidenceScore(data) {
-  let score = 50;
-
-  if (data.fear_greed?.value <= 20) score += 15;
-  if (data.shock_mode) score -= 10;
-  if (data.btc_structure.volatility === "high") score -= 10;
-  if (data.institutional_flows.etf_flow_regime === "positive") score += 10;
-
-  return Math.max(0, Math.min(100, score));
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
 }
 
-fetch("./daily/latest.json")
+fetch("./daily/latest.json?v=" + new Date().getTime())
   .then(res => res.json())
   .then(data => {
 
-    const riskClass = getRiskClass(data.final_action);
-    const confidence = confidenceScore(data);
+    document.getElementById("date").innerText = data.date;
 
-    const dashboard = document.getElementById("dashboard");
+    const actionEl = document.getElementById("final-action");
+    actionEl.innerText = data.final_action;
+    actionEl.classList.add(riskColor(data.final_action));
 
-    dashboard.innerHTML = `
+    document.getElementById("macro").innerText = data.macro_regime;
 
-      <div class="card">
-        <div class="section-title">Core Decision</div>
-        <div class="row">
-          <div>Date</div>
-          <div>${data.date}</div>
-        </div>
-        <div class="row">
-          <div>Macro Regime</div>
-          <div>${data.macro_regime}</div>
-        </div>
-        <div class="row">
-          <div>Final Action</div>
-          <div class="badge ${riskClass}">${data.final_action}</div>
-        </div>
-        <div class="row">
-          <div>Shock Mode</div>
-          <div>${data.shock_mode ? '<span class="badge red">ACTIVE</span>' : 'Normal'}</div>
-        </div>
+    // Shock badge
+    document.getElementById("shock").innerHTML =
+      data.shock_mode
+        ? `<span class="badge red">ACTIVE</span>`
+        : `<span class="badge green">Inactive</span>`;
 
-        <div class="section-title" style="margin-top:20px;">Confidence</div>
-        <div>${confidence}%</div>
-        <div class="confidence-bar">
-          <div class="confidence-fill ${riskClass}" style="width:${confidence}%"></div>
-        </div>
-      </div>
+    // Weekend badge
+    document.getElementById("weekend").innerHTML =
+      data.weekend_mode
+        ? `<span class="badge yellow">Weekend Soft Mode</span>`
+        : `<span class="badge green">Normal</span>`;
 
-      <div class="card">
-        <div class="section-title">BTC Market Structure</div>
-        <div class="row"><div>Above 50DMA</div><div>${data.btc_structure.above_50dma}</div></div>
-        <div class="row"><div>Above 200DMA</div><div>${data.btc_structure.above_200dma}</div></div>
-        <div class="row"><div>Volatility</div><div>${data.btc_structure.volatility}</div></div>
-      </div>
-
-      <div class="card">
-        <div class="section-title">Institutional Flows</div>
-        <div class="row"><div>ETF Flow Regime</div><div>${data.institutional_flows.etf_flow_regime}</div></div>
-        <div class="row"><div>Funding</div><div>${data.funding.funding_regime}</div></div>
-      </div>
-
-      <div class="card">
-        <div class="section-title">Sentiment Overlay</div>
-        <div class="row">
-          <div>Fear & Greed</div>
-          <div>${data.fear_greed?.value} (${data.fear_greed?.classification})</div>
-        </div>
-        <div class="row">
-          <div>Tactical Bias</div>
-          <div>${data.tactical_bias}</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="section-title">Macro Context (PMI)</div>
-        <div class="row"><div>PMI</div><div>${data.pmi?.pmi}</div></div>
-        <div class="row"><div>3M Avg</div><div>${data.pmi?.pmi_3m_avg}</div></div>
-        <div class="row"><div>Trend</div><div>${data.pmi?.pmi_trend}</div></div>
-      </div>
-
+    // BTC Structure
+    document.getElementById("structure").innerHTML = `
+      50DMA: ${data.btc_structure.above_50dma} <br>
+      200DMA: ${data.btc_structure.above_200dma} <br>
+      Volatility: ${data.btc_structure.volatility}
     `;
+
+    document.getElementById("etf").innerText =
+      data.institutional_flows.etf_flow_regime;
+
+    document.getElementById("funding").innerText =
+      data.funding.funding_regime;
+
+    // Fear & Greed
+    if (data.fear_greed) {
+      document.getElementById("fg").innerHTML =
+        `${data.fear_greed.value} (${data.fear_greed.classification})`;
+    } else {
+      document.getElementById("fg").innerText = "N/A";
+    }
+
+    document.getElementById("tactical").innerText =
+      data.tactical_bias || "N/A";
+
   });
 </script>
 
