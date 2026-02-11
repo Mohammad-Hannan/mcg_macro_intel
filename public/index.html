@@ -1,217 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MCG Intelligence System</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MCG Intelligence System</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 40px;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --green: #22c55e;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+  --border: #334155;
+}
 
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+.light-mode {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: #e2e8f0;
+}
 
-    .card {
-      background: #1e293b;
-      padding: 24px;
-      border-radius: 10px;
-      margin-bottom: 25px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
-    }
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: 0.3s ease;
+}
 
-    .primary {
-      text-align: center;
-      padding: 40px;
-    }
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 20px;
+}
 
-    .decision-badge {
-      display: inline-block;
-      padding: 12px 30px;
-      border-radius: 30px;
-      font-size: 18px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-    }
+h1 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
 
-    .HOLD { background: #475569; }
-    .ADD { background: #065f46; }
-    .TRIM { background: #7f1d1d; }
+.card {
+  background: var(--card);
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeIn 0.6s ease forwards;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+@keyframes fadeIn {
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    .label {
-      font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+.section-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
 
-    .value {
-      font-size: 20px;
-      font-weight: 600;
-    }
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
 
-    .section-title {
-      margin-bottom: 15px;
-      font-size: 16px;
-      font-weight: 600;
-      border-bottom: 1px solid #334155;
-      padding-bottom: 8px;
-    }
+.row:last-child {
+  border-bottom: none;
+}
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #334155;
-    }
+.badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+}
 
-    .row:last-child {
-      border-bottom: none;
-    }
+.green { background: var(--green); color: white; }
+.yellow { background: var(--yellow); color: white; }
+.red { background: var(--red); color: white; }
 
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 12px;
-      color: #64748b;
-    }
+.confidence-bar {
+  height: 10px;
+  border-radius: 6px;
+  background: var(--border);
+  overflow: hidden;
+  margin-top: 10px;
+}
 
-    .badge-red {
-      color: #ef4444;
-      font-weight: 600;
-    }
+.confidence-fill {
+  height: 100%;
+  transition: width 0.6s ease;
+}
 
-    .badge-green {
-      color: #22c55e;
-      font-weight: 600;
-    }
+.toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  background: var(--card);
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
 
-  </style>
+@media print {
+  body { background: white; color: black; }
+  .toggle { display: none; }
+  .card { box-shadow: none; }
+}
+</style>
 </head>
 
 <body>
 
-<h1>MCG Intelligence System</h1>
+<div class="toggle" onclick="toggleMode()">Toggle Theme</div>
 
 <div class="container">
+  <h1>MCG Intelligence System</h1>
 
-  <!-- PRIMARY DECISION -->
-  <div class="card primary">
-    <div id="decision" class="decision-badge">Loading...</div>
-    <div id="decision-date"></div>
-    <div id="macro-regime"></div>
-  </div>
-
-  <!-- RISK OVERVIEW -->
-  <div class="grid">
-
-    <div class="card">
-      <div class="label">Shock Mode</div>
-      <div id="shock-mode" class="value"></div>
-    </div>
-
-    <div class="card">
-      <div class="label">Fear & Greed</div>
-      <div id="fear-greed" class="value"></div>
-    </div>
-
-    <div class="card">
-      <div class="label">Tactical Bias</div>
-      <div id="tactical-bias" class="value"></div>
-    </div>
-
-    <div class="card">
-      <div class="label">Volatility Regime</div>
-      <div id="volatility" class="value"></div>
-    </div>
-
-  </div>
-
-  <!-- MARKET STRUCTURE -->
-  <div class="card">
-    <div class="section-title">BTC Market Structure</div>
-    <div class="row"><span>Above 50DMA</span><span id="ma50"></span></div>
-    <div class="row"><span>Above 200DMA</span><span id="ma200"></span></div>
-  </div>
-
-  <!-- FLOWS -->
-  <div class="card">
-    <div class="section-title">Institutional Flows</div>
-    <div class="row"><span>ETF Flow Regime</span><span id="etf"></span></div>
-    <div class="row"><span>Funding Regime</span><span id="funding"></span></div>
-  </div>
-
-  <!-- PMI -->
-  <div class="card">
-    <div class="section-title">Macro Context (PMI)</div>
-    <div class="row"><span>PMI</span><span id="pmi"></span></div>
-    <div class="row"><span>3M Average</span><span id="pmi-avg"></span></div>
-    <div class="row"><span>Trend</span><span id="pmi-trend"></span></div>
-  </div>
-
-</div>
-
-<div class="footer">
-  MCG Intelligence System — Institutional Decision Engine
+  <div id="dashboard"></div>
 </div>
 
 <script>
-fetch("./daily/latest.json?" + new Date().getTime())
+function toggleMode() {
+  document.body.classList.toggle("light-mode");
+}
+
+function getRiskClass(action) {
+  if (action === "ADD") return "green";
+  if (action === "TRIM") return "red";
+  return "yellow";
+}
+
+function confidenceScore(data) {
+  let score = 50;
+
+  if (data.fear_greed?.value <= 20) score += 15;
+  if (data.shock_mode) score -= 10;
+  if (data.btc_structure.volatility === "high") score -= 10;
+  if (data.institutional_flows.etf_flow_regime === "positive") score += 10;
+
+  return Math.max(0, Math.min(100, score));
+}
+
+fetch("./daily/latest.json")
   .then(res => res.json())
   .then(data => {
 
-    const decision = document.getElementById("decision");
-    decision.innerText = data.final_action;
-    decision.classList.add(data.final_action);
+    const riskClass = getRiskClass(data.final_action);
+    const confidence = confidenceScore(data);
 
-    document.getElementById("decision-date").innerText = "Date: " + data.date;
-    document.getElementById("macro-regime").innerText = "Macro Regime: " + data.macro_regime;
+    const dashboard = document.getElementById("dashboard");
 
-    document.getElementById("shock-mode").innerHTML =
-      data.shock_mode ? "<span class='badge-red'>ACTIVE</span>" : "Normal";
+    dashboard.innerHTML = `
 
-    document.getElementById("fear-greed").innerText =
-      data.fear_greed.value + " (" + data.fear_greed.classification + ")";
+      <div class="card">
+        <div class="section-title">Core Decision</div>
+        <div class="row">
+          <div>Date</div>
+          <div>${data.date}</div>
+        </div>
+        <div class="row">
+          <div>Macro Regime</div>
+          <div>${data.macro_regime}</div>
+        </div>
+        <div class="row">
+          <div>Final Action</div>
+          <div class="badge ${riskClass}">${data.final_action}</div>
+        </div>
+        <div class="row">
+          <div>Shock Mode</div>
+          <div>${data.shock_mode ? '<span class="badge red">ACTIVE</span>' : 'Normal'}</div>
+        </div>
 
-    document.getElementById("tactical-bias").innerText = data.tactical_bias;
+        <div class="section-title" style="margin-top:20px;">Confidence</div>
+        <div>${confidence}%</div>
+        <div class="confidence-bar">
+          <div class="confidence-fill ${riskClass}" style="width:${confidence}%"></div>
+        </div>
+      </div>
 
-    document.getElementById("volatility").innerText = data.btc_structure.volatility;
+      <div class="card">
+        <div class="section-title">BTC Market Structure</div>
+        <div class="row"><div>Above 50DMA</div><div>${data.btc_structure.above_50dma}</div></div>
+        <div class="row"><div>Above 200DMA</div><div>${data.btc_structure.above_200dma}</div></div>
+        <div class="row"><div>Volatility</div><div>${data.btc_structure.volatility}</div></div>
+      </div>
 
-    document.getElementById("ma50").innerText = data.btc_structure.above_50dma;
-    document.getElementById("ma200").innerText = data.btc_structure.above_200dma;
+      <div class="card">
+        <div class="section-title">Institutional Flows</div>
+        <div class="row"><div>ETF Flow Regime</div><div>${data.institutional_flows.etf_flow_regime}</div></div>
+        <div class="row"><div>Funding</div><div>${data.funding.funding_regime}</div></div>
+      </div>
 
-    document.getElementById("etf").innerText =
-      data.institutional_flows.etf_flow_regime;
+      <div class="card">
+        <div class="section-title">Sentiment Overlay</div>
+        <div class="row">
+          <div>Fear & Greed</div>
+          <div>${data.fear_greed?.value} (${data.fear_greed?.classification})</div>
+        </div>
+        <div class="row">
+          <div>Tactical Bias</div>
+          <div>${data.tactical_bias}</div>
+        </div>
+      </div>
 
-    document.getElementById("funding").innerText =
-      data.funding.funding_regime;
+      <div class="card">
+        <div class="section-title">Macro Context (PMI)</div>
+        <div class="row"><div>PMI</div><div>${data.pmi?.pmi}</div></div>
+        <div class="row"><div>3M Avg</div><div>${data.pmi?.pmi_3m_avg}</div></div>
+        <div class="row"><div>Trend</div><div>${data.pmi?.pmi_trend}</div></div>
+      </div>
 
-    document.getElementById("pmi").innerText = data.pmi.pmi;
-    document.getElementById("pmi-avg").innerText = data.pmi.pmi_3m_avg;
-    document.getElementById("pmi-trend").innerText = data.pmi.pmi_trend;
-
+    `;
   });
 </script>
 
