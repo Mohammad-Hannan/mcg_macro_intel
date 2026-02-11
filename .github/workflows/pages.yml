@@ -1,9 +1,11 @@
-name: Deploy GitHub Pages
+name: Deploy MCG Dashboard
 
 on:
+  push:
+    branches: ["main"]
   workflow_dispatch:
   schedule:
-    - cron: "0 6 * * *"  # daily 6 UTC
+    - cron: "0 6 * * *"   # Daily at 6 AM UTC
 
 permissions:
   contents: read
@@ -15,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -28,25 +30,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run daily pipeline
-        run: python -m scripts.daily_pipeline
-
-      - name: Ensure output directory exists
+      - name: Run Daily Pipeline
         run: |
-          ls -R public
+          python -m scripts.daily_pipeline
 
-      - name: Upload Pages artifact
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
-    runs-on: ubuntu-latest
-    needs: build
 
     steps:
       - name: Deploy to GitHub Pages
