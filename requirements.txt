@@ -3,4 +3,4 @@ pandas
 numpy
 beautifulsoup4
 lxml
-python-dateutil
+python-dateutilgit

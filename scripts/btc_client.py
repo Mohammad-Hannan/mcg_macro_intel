@@ -66,6 +66,55 @@ def compute_realized_volatility(df, window=30):
     return float(vol * np.sqrt(365))
 
 
+def compute_shock_mode(df):
+    """
+    Detect abnormal BTC market shock conditions.
+    Returns:
+        {
+            "shock_mode": bool,
+            "pct_change_24h": float,
+            "intraday_range": float
+        }
+    """
+
+    df = df.copy().dropna()
+
+    if len(df) < 2:
+        return {
+            "shock_mode": False,
+            "pct_change_24h": 0,
+            "intraday_range": 0
+        }
+
+    # Latest and previous close
+    last_price = df.iloc[-1]["price"]
+    prev_price = df.iloc[-2]["price"]
+
+    pct_change_24h = (last_price - prev_price) / prev_price
+
+    # Intraday range using last 2 days (approximation)
+    high = max(df.iloc[-1]["price"], df.iloc[-2]["price"])
+    low = min(df.iloc[-1]["price"], df.iloc[-2]["price"])
+
+    intraday_range = (high - low) / last_price
+
+
+    shock_mode = False
+
+    # -8% or worse
+    if pct_change_24h <= -0.08:
+        shock_mode = True
+
+    # 7%+ intraday range
+    if intraday_range >= 0.07:
+        shock_mode = True
+
+    return {
+        "shock_mode": shock_mode,
+        "pct_change_24h": pct_change_24h,
+        "intraday_range": intraday_range
+    }
+
 def compute_vol_regime(df, threshold=0.80):
     """
     Classify BTC volatility regime.
