@@ -2,14 +2,14 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>MCG Intelligence Dashboard</title>
+  <title>MCG Intelligence System</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #0f172a;
-      color: #e2e8f0;
+      background: linear-gradient(180deg, #0f1c2e, #0b1423);
+      color: #e6edf3;
       margin: 0;
-      padding: 40px;
+      padding: 30px;
     }
 
     h1 {
@@ -18,108 +18,124 @@
     }
 
     .card {
-      background: #1e293b;
-      padding: 25px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      background: #1b263b;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .add { background: #1f8f4f; }
+    .hold { background: #9e9e9e; }
+    .trim { background: #c0392b; }
+    .shock { background: #ff0000; }
+    .neutral { background: #2c3e50; }
 
     table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 10px;
     }
 
     td {
-      padding: 10px 0;
-      border-bottom: 1px solid #334155;
+      padding: 8px;
+      border-bottom: 1px solid #2c3e50;
     }
 
-    .badge {
-      padding: 5px 10px;
-      border-radius: 6px;
+    .label {
       font-weight: bold;
-      font-size: 14px;
+      width: 40%;
     }
-
-    .red { background-color: #b91c1c; }
-    .green { background-color: #065f46; }
-    .yellow { background-color: #92400e; }
-
-    .large {
-      font-size: 28px;
-      font-weight: bold;
-    }
-
   </style>
 </head>
-
 <body>
 
 <h1>MCG Intelligence System</h1>
 
-<div class="card">
-  <div id="signal"></div>
-</div>
-
-<div class="card">
-  <table id="signal-table"></table>
-</div>
+<div class="card" id="core-decision"></div>
+<div class="card" id="btc-structure"></div>
+<div class="card" id="flows"></div>
+<div class="card" id="sentiment"></div>
+<div class="card" id="macro"></div>
 
 <script>
 fetch("./daily/latest.json")
   .then(res => res.json())
   .then(data => {
 
-    const signalDiv = document.getElementById("signal");
-    const table = document.getElementById("signal-table");
+    // ---------------- CORE ----------------
+    let actionClass = data.final_action.toLowerCase();
 
-    // === FINAL ACTION DISPLAY ===
-    let color = "yellow";
-    if (data.final_action === "ADD") color = "green";
-    if (data.final_action === "TRIM") color = "red";
+    let shockBadge = data.shock_mode
+      ? `<span class="badge shock">SHOCK MODE</span>`
+      : "";
 
-    signalDiv.innerHTML = `
-      <div class="large">Signal: 
-        <span class="badge ${color}">
+    let weekendBadge = data.weekend_mode
+      ? `<span class="badge neutral">WEEKEND MODE</span>`
+      : "";
+
+    document.getElementById("core-decision").innerHTML = `
+      <h2>Core Decision</h2>
+      <div>
+        <span class="badge ${actionClass}">
           ${data.final_action}
         </span>
+        ${shockBadge}
+        ${weekendBadge}
       </div>
-      <p>Date: ${data.date}</p>
+      <p><strong>Date:</strong> ${data.date}</p>
+      <p><strong>Macro Regime:</strong> ${data.macro_regime}</p>
     `;
 
-    // === SHOCK MODE BADGE ===
-    const shockBadge = data.shock_mode 
-      ? `<span class="badge red">SHOCK MODE</span>`
-      : `<span class="badge green">Normal</span>`;
+    // ---------------- BTC STRUCTURE ----------------
+    document.getElementById("btc-structure").innerHTML = `
+      <h2>BTC Market Structure</h2>
+      <table>
+        <tr><td class="label">Above 50DMA</td><td>${data.btc_structure.above_50dma}</td></tr>
+        <tr><td class="label">Above 200DMA</td><td>${data.btc_structure.above_200dma}</td></tr>
+        <tr><td class="label">Volatility</td><td>${data.btc_structure.volatility}</td></tr>
+      </table>
+    `;
 
-    const weekendBadge = data.weekend_mode
-      ? `<span class="badge yellow">Weekend Mode</span>`
-      : `<span class="badge green">Weekday</span>`;
+    // ---------------- FLOWS ----------------
+    document.getElementById("flows").innerHTML = `
+      <h2>Institutional Flows</h2>
+      <table>
+        <tr><td class="label">ETF Flow Regime</td><td>${data.institutional_flows.etf_flow_regime}</td></tr>
+        <tr><td class="label">Funding Regime</td><td>${data.funding.funding_regime}</td></tr>
+      </table>
+    `;
 
-    // === BUILD TABLE ===
-    const rows = [
-      ["Macro Regime", data.macro_regime],
-      ["BTC Above 50 DMA", data.btc_structure.above_50dma],
-      ["BTC Above 200 DMA", data.btc_structure.above_200dma],
-      ["Volatility Regime", data.btc_structure.volatility],
-      ["ETF Flow Regime", data.institutional_flows.etf_flow_regime],
-      ["Funding Regime", data.funding.funding_regime],
-      ["PMI Trend", data.pmi?.pmi_trend || "N/A"],
-      ["Fear & Greed", data.fear_greed ? 
-          `${data.fear_greed.value} (${data.fear_greed.classification})`
-          : "N/A"],
-      ["Tactical Bias", data.tactical_bias || "N/A"],
-      ["Shock Mode", shockBadge],
-      ["Weekend Mode", weekendBadge]
-    ];
+    // ---------------- SENTIMENT ----------------
+    document.getElementById("sentiment").innerHTML = `
+      <h2>Sentiment Overlay</h2>
+      <table>
+        <tr><td class="label">Fear & Greed</td><td>${data.fear_greed?.value || "N/A"} (${data.fear_greed?.classification || "N/A"})</td></tr>
+        <tr><td class="label">Tactical Bias</td><td>${data.tactical_bias || "N/A"}</td></tr>
+      </table>
+    `;
 
-    rows.forEach(row => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `<td><strong>${row[0]}</strong></td><td>${row[1]}</td>`;
-      table.appendChild(tr);
-    });
+    // ---------------- MACRO ----------------
+    document.getElementById("macro").innerHTML = `
+      <h2>Macro Context (PMI)</h2>
+      <table>
+        <tr><td class="label">PMI</td><td>${data.pmi?.pmi || "N/A"}</td></tr>
+        <tr><td class="label">3M Avg</td><td>${data.pmi?.pmi_3m_avg || "N/A"}</td></tr>
+        <tr><td class="label">Trend</td><td>${data.pmi?.pmi_trend || "N/A"}</td></tr>
+      </table>
+    `;
 
+  })
+  .catch(err => {
+    console.error("Dashboard load error:", err);
   });
 </script>
 
