@@ -1,28 +1,27 @@
 import requests
 from datetime import datetime
 
-CMC_FNG_URL = "https://pro-api.coinmarketcap.com/v3/fear-and-greed/latest"
+FNG_URL = "https://api.alternative.me/fng/?limit=1&format=json"
 
-# If using Alternative.me fallback
-ALT_FNG_URL = "https://api.alternative.me/fng/"
 
 def fetch_fear_greed():
-    """
-    Fetch Fear & Greed Index.
-    Uses Alternative.me as free fallback.
-    """
-
     try:
-        r = requests.get(ALT_FNG_URL, timeout=10)
+        r = requests.get(FNG_URL, timeout=10)
+        r.raise_for_status()
         data = r.json()
 
-        value = int(data["data"][0]["value"])
-        classification = data["data"][0]["value_classification"]
-        timestamp = data["data"][0]["timestamp"]
+        if "data" not in data or len(data["data"]) == 0:
+            return None
+
+        entry = data["data"][0]
+
+        value = int(entry["value"])
+        classification = entry["value_classification"].lower().replace(" ", "_")
+        timestamp = entry["timestamp"]
 
         return {
             "value": value,
-            "classification": classification.lower().replace(" ", "_"),
+            "classification": classification,
             "timestamp": timestamp,
             "source": "alternative_me"
         }
@@ -32,18 +31,14 @@ def fetch_fear_greed():
         return None
 
 
-def classify_tactical_bias(fg_value):
-    """
-    Map Fear & Greed value to tactical bias.
-    """
-
-    if fg_value <= 20:
+def classify_tactical_bias(value):
+    if value <= 20:
         return "TACTICAL_ADD_STRONG"
-    elif fg_value <= 40:
+    elif value <= 40:
         return "TACTICAL_ADD"
-    elif fg_value <= 60:
+    elif value <= 60:
         return "TACTICAL_HOLD"
-    elif fg_value <= 75:
+    elif value <= 75:
         return "TACTICAL_TRIM_PREP"
     else:
         return "TACTICAL_TRIM"

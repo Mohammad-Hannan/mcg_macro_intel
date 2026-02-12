@@ -1,4 +1,3 @@
-
 import json
 from datetime import datetime
 
@@ -22,9 +21,6 @@ from scripts.etf_client import (
     fetch_etf_flows,
     compute_flow_regime
 )
-from datetime import datetime
-weekend_mode = datetime.utcnow().weekday() >= 5
-
 
 # Funding
 from scripts.funding_client import (
@@ -32,7 +28,11 @@ from scripts.funding_client import (
     classify_funding
 )
 
-from scripts.fear_greed_client import fetch_fear_greed, classify_tactical_bias
+# Fear & Greed
+from scripts.fear_greed_client import (
+    fetch_fear_greed,
+    classify_tactical_bias
+)
 
 # Decision engine
 from scripts.decision_engine import decide_action
@@ -48,8 +48,24 @@ from scripts.pmi_client import (
 from scripts.output_writer import write_daily_output
 
 
+
+def refresh_data_if_needed(fetch_function, max_attempts=2):
+    """
+    Attempts to refetch data up to max_attempts.
+    Returns fetched data or raises last exception.
+    """
+    last_exception = None
+
+    for attempt in range(max_attempts):
+        try:
+            return fetch_function()
+        except Exception as e:
+            last_exception = e
+            logger.warning(f"Retry attempt {attempt + 1} failed: {e}")
+
+    raise last_exception
+
 def get_macro_regime():
-    """PMI-backed macro regime with safe default"""
     try:
         df = load_pmi_data()
         metrics = compute_pmi_metrics(df)
@@ -65,68 +81,101 @@ def get_macro_regime():
         return regime, metrics
 
     except Exception as e:
-        logger.warning(f"PMI error, defaulting macro regime: {e}")
+        logger.warning(f"PMI error: {e}")
         return REGIME_UNCLEAR, None
 
 
 def run_daily_pipeline():
-    logger.info("Starting daily pipeline")
-    today = datetime.utcnow().strftime("%Y-%m-%d")
-    today_dt = datetime.utcnow()
-    day_of_week = today_dt.weekday()  # Monday=0, Sunday=6
-    weekend_mode = day_of_week in [5, 6]
 
-    # --- BTC Structure ---
+    logger.info("Starting daily pipeline")
+
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    weekend_mode = datetime.utcnow().weekday() >= 5
+
+    data_health = "healthy"
+    health_warnings = []
+
+    # ---------------- BTC ----------------
     try:
-        btc_df = fetch_btc_history()
+        btc_df = refresh_data_if_needed(fetch_btc_history)
         structure = compute_moving_averages(btc_df)
         vol_regime = compute_vol_regime(btc_df)
         shock_data = compute_shock_mode(btc_df)
         shock_mode = shock_data["shock_mode"]
-    except Exception as e:
-        logger.error(f"BTC structure error: {e}")
-        structure = {
-            "above_50dma": "no",
-            "above_200dma": "no"
-        }
-        vol_regime = "high"
 
-    # --- ETF Flows ---
+    except Exception as e:
+        logger.error(f"BTC error: {e}")
+        structure = {"above_50dma": "no", "above_200dma": "no"}
+        vol_regime = "high"
+        shock_mode = False
+        shock_data = {
+            "pct_change_24h": None,
+            "intraday_range": None
+        }
+        data_health = "degraded"
+        health_warnings.append("BTC failure")
+
+    # ---------------- ETF ----------------
     try:
-        etf_df = fetch_etf_flows()
+        etf_df = refresh_data_if_needed(fetch_etf_flows)
         etf_flow_regime = compute_flow_regime(etf_df)
     except Exception as e:
-        logger.warning(f"ETF flow error: {e}")
+        logger.warning(f"ETF error: {e}")
         etf_flow_regime = "mixed"
+        data_health = "degraded"
+        health_warnings.append("ETF failure")
 
-    # --- Funding ---
+    # ---------------- FUNDING ----------------
     try:
-        funding_df = fetch_funding_rates()
+        funding_df = refresh_data_if_needed(fetch_funding_rates)
         funding_regime = classify_funding(funding_df)
     except Exception as e:
         logger.warning(f"Funding error: {e}")
         funding_regime = "neutral"
 
-    # --- PMI / Macro ---
+    # ---------------- PMI ----------------
     macro_regime, pmi_metrics = get_macro_regime()
+
+    # ---------------- FEAR & GREED ----------------
+    fg_data = None
+    tactical_bias = "TACTICAL_HOLD"
 
     try:
         fg_data = fetch_fear_greed()
-        if fg_data:
+        logger.info(f"FG RAW DATA: {fg_data}")
+
+        if fg_data and fg_data.get("value") is not None:
             tactical_bias = classify_tactical_bias(fg_data["value"])
         else:
-            tactical_bias = "TACTICAL_HOLD"
+            health_warnings.append("Fear & Greed returned empty")
+
     except Exception as e:
-        logger.warning(f"Fear & Greed error: {e}")
-        fg_data = None
-        tactical_bias = "TACTICAL_HOLD"
+        logger.warning(f"Fear & Greed failure: {e}")
+        health_warnings.append("Fear & Greed API unreachable")
 
-    # --- Weekend Soft Gating ---
+    # Weekend soft gating
     if weekend_mode and tactical_bias in ["TACTICAL_ADD_STRONG", "TACTICAL_ADD"]:
-        logger.info("Weekend mode active — softening tactical bias")
         tactical_bias = "TACTICAL_HOLD"
 
-    # --- Decision Engine ---
+
+    # -------- FINAL DATA HEALTH GUARD --------
+    # ---------------- HARD DATA HEALTH GUARD ----------------
+    if data_health != "healthy":
+        logger.error("Data health check failed — aborting signal generation")
+
+        output = {
+            "date": today,
+            "status": "DATA_INVALID",
+            "data_health": data_health,
+            "health_warnings": health_warnings,
+            "message": "Signal generation aborted due to stale or failed data sources."
+        }
+
+        path = write_daily_output(output)
+
+        logger.error(f"Output written with DATA_INVALID status to {path}")
+        return
+    # ---------------- DECISION ENGINE ----------------
     try:
         final_action = decide_action(
             macro_regime=macro_regime,
@@ -140,16 +189,18 @@ def run_daily_pipeline():
         logger.error(f"Decision engine error: {e}")
         final_action = DEFAULT_ACTION
 
-    # --- Final Output ---
+    # ---------------- OUTPUT ----------------
     output = {
         "date": today,
         "weekend_mode": weekend_mode,
+        "data_health": data_health,
+        "health_warnings": health_warnings,
         "macro_regime": macro_regime,
         "shock": {
-             "shock_mode": shock_mode,
-             "pct_change_24h": shock_data["pct_change_24h"],
-             "intraday_range": shock_data["intraday_range"]
-},
+            "shock_mode": shock_mode,
+            "pct_change_24h": shock_data.get("pct_change_24h"),
+            "intraday_range": shock_data.get("intraday_range")
+        },
         "fear_greed": fg_data if fg_data else {
             "value": None,
             "classification": None,
@@ -161,7 +212,6 @@ def run_daily_pipeline():
             "above_200dma": structure["above_200dma"],
             "volatility": vol_regime
         },
-
         "institutional_flows": {
             "etf_flow_regime": etf_flow_regime
         },
