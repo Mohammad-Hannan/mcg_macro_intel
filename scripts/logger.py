@@ -15,18 +15,21 @@ def get_logger(name="mcg"):
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
 
-    if not logger.handlers:
-        formatter = logging.Formatter(
-            "%(asctime)s | %(levelname)s | %(message)s"
-        )
+    # Clear old handlers (important in CLI reruns)
+    if logger.hasHandlers():
+        logger.handlers.clear()
 
-        fh = logging.FileHandler(log_file)
-        fh.setFormatter(formatter)
+    formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)s | %(message)s"
+    )
 
-        sh = logging.StreamHandler()
-        sh.setFormatter(formatter)
+    fh = logging.FileHandler(log_file)
+    fh.setFormatter(formatter)
 
-        logger.addHandler(fh)
-        logger.addHandler(sh)
+    sh = logging.StreamHandler()
+    sh.setFormatter(formatter)
+
+    logger.addHandler(fh)
+    logger.addHandler(sh)
 
     return logger

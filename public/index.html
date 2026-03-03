@@ -3,259 +3,396 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>MCG Intelligence Dashboard</title>
+<title>MCG Intelligence</title>
 
 <style>
 :root {
-  --bg: #0f1115;
-  --card: #161a22;
-  --text: #e6e9ef;
-  --muted: #9aa3b2;
-
-  --green: #2ecc71;
-  --yellow: #f1c40f;
-  --red: #e74c3c;
+  --bg: #0b0f17;
+  --panel: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+  --text: #e8ecf1;
+  --muted: #98a2b3;
+  --green: #3ddc97;
+  --yellow: #facc15;
+  --red: #f87171;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: var(--bg);
+  background: radial-gradient(circle at top left, #111827, #0b0f17 60%);
   color: var(--text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  transition: 0.3s ease;
 }
 
+body.panel-open { overflow: hidden; }
+
 .container {
-  max-width: 1100px;
-  margin: 60px auto;
-  padding: 20px;
+  max-width: 1250px;
+  margin: 80px auto;
+  padding: 0 30px;
 }
 
 h1 {
+  font-size: 28px;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  margin-bottom: 60px;
 }
 
-.card {
-  background: var(--card);
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  border-radius: 18px;
+  padding: 40px;
+  margin-bottom: 40px;
+  transition: 0.3s ease;
 }
 
-.grid {
+.hero-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.headline {
+  font-size: 64px;
+  font-weight: 600;
+}
+
+.subtle {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.meta-grid, .grid {
+  display: grid;
+  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
 }
 
 .label {
-  font-size: 13px;
+  font-size: 12px;
+  text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 6px;
 }
 
 .value {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.badge {
-  padding: 6px 12px;
+.bar-container {
+  height: 8px;
+  background: rgba(255,255,255,0.08);
   border-radius: 6px;
-  font-weight: 600;
+  overflow: hidden;
+  margin-top: 16px;
+}
+
+.bar {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.risk-pill,
+.tactical-pill {
+  padding: 6px 14px;
+  border-radius: 100px;
   font-size: 13px;
+  font-weight: 600;
   display: inline-block;
 }
 
-.green { background: rgba(46,204,113,0.15); color: var(--green); }
-.yellow { background: rgba(241,196,15,0.15); color: var(--yellow); }
-.red { background: rgba(231,76,60,0.15); color: var(--red); }
+.tactical-green { background: rgba(61,220,151,0.15); color: var(--green); }
+.tactical-yellow { background: rgba(250,204,21,0.15); color: var(--yellow); }
+.tactical-red { background: rgba(248,113,113,0.15); color: var(--red); }
 
-.section-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+@keyframes glow-green {
+  0% { box-shadow: 0 0 0px rgba(61,220,151,0.0); }
+  50% { box-shadow: 0 0 18px rgba(61,220,151,0.45); }
+  100% { box-shadow: 0 0 0px rgba(61,220,151,0.0); }
+}
+.tactical-glow { animation: glow-green 2s infinite ease-in-out; }
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0px rgba(248,113,113,0.0); }
+  50% { box-shadow: 0 0 25px rgba(248,113,113,0.6); }
+  100% { box-shadow: 0 0 0px rgba(248,113,113,0.0); }
+}
+.liquidity-alert {
+  animation: pulse-red 1.8s infinite ease-in-out;
+  border: 1px solid rgba(248,113,113,0.5);
 }
 
-.top-bar {
+/* DIM OVERLAY */
+.overlay-dim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 900;
+}
+.overlay-dim.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* SIDE PANEL */
+.sidepanel {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 440px;
+  height: 100%;
+  background: rgba(12,16,24,0.98);
+  border-left: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  padding: 60px 40px;
+  overflow-y: auto;
+  transition: right 0.35s ease;
+  z-index: 1000;
+}
+.sidepanel.open { right: 0; }
+
+.sidepanel h2 {
+  font-size: 22px;
+  margin-bottom: 40px;
+  color: var(--text);
+}
+
+.sidepanel div {
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  color: var(--muted);
+}
+
+.sidepanel strong { color: var(--text); }
+
+.sidepanel-toggle {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  width: 80px;
+  height: 70px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  color: var(--text);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1100;
+  font-size: 12px;
+}
+.sidepanel-toggle span {
+  font-size: 20px;
+  font-weight: 600;
 }
 </style>
 </head>
+
 <body>
 
+<div class="overlay-dim" id="overlayDim" onclick="closePanel()"></div>
+
 <div class="container">
+<h1>MCG Intelligence</h1>
 
-  <div class="top-bar">
-    <h1>MCG Intelligence</h1>
-  </div>
+<!-- HERO -->
+<div class="panel">
+<div class="hero-grid">
+<div>
+<div class="subtle">Bitcoin Allocation Target</div>
+<div class="headline" id="allocation"></div>
+<div class="bar-container"><div id="allocation-bar" class="bar"></div></div>
+<div style="margin-top:20px;" class="subtle" id="structural"></div>
+</div>
+<div>
+<div class="subtle">Macro Risk Gauge</div>
+<div class="headline" id="mrg-hero"></div>
+<div style="margin-top:15px;" id="risk-level"></div>
+</div>
+</div>
+</div>
 
-  <!-- HEADER SUMMARY -->
-  <div class="card">
-    <div class="section-title">Summary</div>
-    <div class="grid">
-      <div>
-        <div class="label">Date</div>
-        <div class="value" id="date"></div>
-      </div>
-      <div>
-        <div class="label">Final Action</div>
-        <div class="value" id="final-action"></div>
-      </div>
-      <div>
-        <div class="label">Macro Regime</div>
-        <div class="value" id="macro"></div>
-      </div>
-      <div>
-        <div class="label">Data Health</div>
-        <div id="health"></div>
-      </div>
-    </div>
-  </div>
+<!-- SYSTEM META -->
+<div class="panel">
+<div class="meta-grid">
+<div><div class="label">Date</div><div class="value" id="date"></div></div>
+<div><div class="label">Macro Regime</div><div class="value" id="macro"></div></div>
+<div><div class="label">Fear & Greed</div><div class="value" id="fg"></div></div>
+<div><div class="label">Tactical Bias</div><div class="value" id="tactical"></div></div>
+<div><div class="label">Overlay Version</div><div class="value" id="version"></div></div>
+</div>
+</div>
 
-  <!-- RISK FLAGS -->
-  <div class="card">
-    <div class="section-title">Risk Flags</div>
-    <div class="grid">
-      <div>
-        <div class="label">Shock Mode</div>
-        <div id="shock"></div>
-      </div>
-      <div>
-        <div class="label">Weekend Mode</div>
-        <div id="weekend"></div>
-      </div>
-      <div>
-        <div class="label">Fear & Greed</div>
-        <div id="fg"></div>
-      </div>
-      <div>
-        <div class="label">Tactical Bias</div>
-        <div class="value" id="tactical"></div>
-      </div>
-    </div>
-  </div>
+<!-- RISK ENGINE -->
+<div class="panel">
+<div class="subtle">Risk Engine Decomposition</div>
+<div class="grid">
+<div><div class="label">CRS</div><div class="value" id="crs"></div></div>
+<div><div class="label">LRS</div><div class="value" id="lrs"></div></div>
+<div><div class="label">MRG</div><div class="value" id="mrg-breakdown"></div></div>
+</div>
+</div>
 
-  <!-- MARKET STRUCTURE -->
-  <div class="card">
-    <div class="section-title">Market Structure</div>
-    <div class="grid">
-      <div>
-        <div class="label">50 DMA</div>
-        <div class="value" id="dma50"></div>
-      </div>
-      <div>
-        <div class="label">200 DMA</div>
-        <div class="value" id="dma200"></div>
-      </div>
-      <div>
-        <div class="label">Volatility Regime</div>
-        <div class="value" id="vol"></div>
-      </div>
-      <div>
-        <div class="label">ETF Flow Regime</div>
-        <div class="value" id="etf"></div>
-      </div>
-      <div>
-        <div class="label">Funding Regime</div>
-        <div class="value" id="funding"></div>
-      </div>
-    </div>
-  </div>
+<!-- LIQUIDITY -->
+<div class="panel">
+<div class="subtle">Liquidity Regime</div>
+<div class="grid">
+<div><div class="label">LPI</div><div class="value" id="lpi"></div></div>
+<div><div class="label">Institutional Bias</div><div class="value" id="inst-bias"></div></div>
+<div><div class="label">Liquidity Stress</div><div class="value" id="liq-stress"></div></div>
+</div>
+</div>
+
+<!-- ETF -->
+<div class="panel">
+<div class="subtle">ETF Flow Intelligence</div>
+<div class="grid">
+<div><div class="label">7d Flow</div><div class="value" id="flow7"></div></div>
+<div><div class="label">30d Flow</div><div class="value" id="flow30"></div></div>
+<div><div class="label">Acceleration</div><div class="value" id="flowAccel"></div></div>
+</div>
+</div>
+
+<!-- DERIVATIVES -->
+<div class="panel">
+<div class="subtle">Derivatives Structure</div>
+<div class="grid">
+<div><div class="label">Funding</div><div class="value" id="funding-rate"></div></div>
+<div><div class="label">Basis %</div><div class="value" id="basis"></div></div>
+<div><div class="label">Open Interest</div><div class="value" id="oi"></div></div>
+</div>
+</div>
 
 </div>
 
 <script>
-
-function badge(type, text) {
-  return `<span class="badge ${type}">${text}</span>`;
+function riskColor(mrg){
+if(mrg>=70) return "var(--red)";
+if(mrg<=30) return "var(--green)";
+return "var(--yellow)";
 }
 
-function actionColor(action) {
-  if (action === "ADD") return "green";
-  if (action === "TRIM") return "red";
-  return "yellow";
+fetch("./daily/latest.json?v="+new Date().getTime())
+.then(res=>res.json())
+.then(data=>{
+const portfolio=data.portfolio_signal;
+const risk=data.risk_engine;
+const overlay=data.overlay;
+const phase2=data.phase2;
+
+const mrg=risk?.mrg||0;
+const exposure=overlay?.exposure_recommendation||0;
+
+document.getElementById("allocation").innerText=portfolio?.btc_allocation_target||"—";
+
+let arrow="→";
+if(mrg>=70) arrow="↑";
+if(mrg<=30) arrow="↓";
+
+document.getElementById("mrg-hero").innerHTML=
+`${mrg.toFixed(2)} <span style="font-size:28px;opacity:0.7">${arrow}</span>`;
+
+document.getElementById("risk-level").innerHTML=
+`<span class="risk-pill" style="background:${riskColor(mrg)}20;color:${riskColor(mrg)};">
+${portfolio?.risk_level}
+</span>`;
+
+document.getElementById("structural").innerText=portfolio?.structural_regime||"";
+document.getElementById("date").innerText=data.date;
+document.getElementById("macro").innerText=data.macro_regime;
+document.getElementById("version").innerText=portfolio?.overlay_version;
+
+if(data.fear_greed?.value!==null){
+document.getElementById("fg").innerText=
+`${data.fear_greed.value} (${data.fear_greed.classification})`;
 }
 
-fetch("./daily/latest.json?v=" + new Date().getTime())
-  .then(res => res.json())
-  .then(data => {
+const bias=data.tactical_bias||"N/A";
+let color="tactical-yellow";
+let glow="";
+if(bias.includes("ADD")) color="tactical-green";
+if(bias.includes("TRIM")) color="tactical-red";
+if(bias==="TACTICAL_ADD_STRONG") glow="tactical-glow";
 
-    // Summary
-    document.getElementById("date").innerText = data.date;
+document.getElementById("tactical").innerHTML=
+`<span class="tactical-pill ${color} ${glow}">
+${bias.replace("TACTICAL_","").replace(/_/g," ")}
+</span>`;
 
-    const actionEl = document.getElementById("final-action");
-    actionEl.innerText = data.final_action;
-    actionEl.classList.add(actionColor(data.final_action));
+document.getElementById("crs").innerText=risk?.crs;
+document.getElementById("lrs").innerText=risk?.lrs;
+document.getElementById("mrg-breakdown").innerText=mrg.toFixed(2);
 
-    document.getElementById("macro").innerText = data.macro_regime;
+document.getElementById("lpi").innerText=phase2?.lpi;
+document.getElementById("inst-bias").innerText=phase2?.institutional_bias;
+document.getElementById("liq-stress").innerText=
+phase2?.liquidity_regime?.liquidity_stress?"Stress":"Stable";
 
-    // Data health
-    if (data.data_health === "healthy") {
-      document.getElementById("health").innerHTML = badge("green", "Healthy");
-    } else {
-      document.getElementById("health").innerHTML = badge("red", "Degraded");
-    }
+document.getElementById("flow7").innerText=phase2?.etf_flows?.flow_7d+"M";
+document.getElementById("flow30").innerText=phase2?.etf_flows?.flow_30d+"M";
+document.getElementById("flowAccel").innerText=phase2?.etf_flows?.flow_acceleration+"M";
 
-    // Shock
-    if (data.shock?.shock_mode) {
-      document.getElementById("shock").innerHTML =
-        badge("red", "ACTIVE") +
-        `<div style="margin-top:6px;font-size:12px;color:#9aa3b2;">
-          24h: ${(data.shock.pct_change_24h * 100).toFixed(2)}%<br>
-          Range: ${(data.shock.intraday_range * 100).toFixed(2)}%
-        </div>`;
-    } else {
-      document.getElementById("shock").innerHTML = badge("green", "Inactive");
-    }
+document.getElementById("funding-rate").innerText=
+phase2?.derivatives?.funding?.toFixed(6);
+document.getElementById("basis").innerText=
+(phase2?.derivatives?.basis_percent*100).toFixed(2)+"%";
+document.getElementById("oi").innerText=
+phase2?.derivatives?.open_interest?.toFixed(0);
 
-    // Weekend
-    document.getElementById("weekend").innerHTML =
-      data.weekend_mode
-        ? badge("yellow", "Soft Mode")
-        : badge("green", "Normal");
+const bar=document.getElementById("allocation-bar");
+bar.style.width=(exposure*100)+"%";
+bar.style.background=riskColor(mrg);
 
-    // Fear & Greed
-    if (data.fear_greed && data.fear_greed.value !== null) {
-      const fgVal = data.fear_greed.value;
-      let color = "yellow";
-      if (fgVal <= 25) color = "green";
-      if (fgVal >= 75) color = "red";
+if(phase2?.liquidity_regime?.liquidity_stress){
+document.querySelectorAll(".panel").forEach(p=>p.classList.add("liquidity-alert"));
+}
+});
 
-      document.getElementById("fg").innerHTML =
-        badge(color, `${fgVal} (${data.fear_greed.classification})`);
-    } else {
-      document.getElementById("fg").innerHTML = badge("yellow", "Unavailable");
-    }
-
-    document.getElementById("tactical").innerText =
-      data.tactical_bias || "N/A";
-
-    // Structure
-    document.getElementById("dma50").innerText =
-      data.btc_structure.above_50dma;
-
-    document.getElementById("dma200").innerText =
-      data.btc_structure.above_200dma;
-
-    document.getElementById("vol").innerText =
-      data.btc_structure.volatility;
-
-    document.getElementById("etf").innerText =
-      data.institutional_flows.etf_flow_regime;
-
-    document.getElementById("funding").innerText =
-      data.funding.funding_regime;
-
-  });
-
+function togglePanel(){
+document.getElementById("dictionaryPanel").classList.toggle("open");
+document.getElementById("overlayDim").classList.toggle("active");
+document.body.classList.toggle("panel-open");
+}
+function closePanel(){
+document.getElementById("dictionaryPanel").classList.remove("open");
+document.getElementById("overlayDim").classList.remove("active");
+document.body.classList.remove("panel-open");
+}
 </script>
+
+<div class="sidepanel-toggle" onclick="togglePanel()">
+<span>?</span>
+GUIDE
+</div>
+
+<div id="dictionaryPanel" class="sidepanel">
+<h2>System Dictionary</h2>
+<div><strong>MRG</strong> — Macro Risk Gauge (0–100). Composite systemic risk score.</div>
+<div><strong>CRS</strong> — Structural + macro baseline risk.</div>
+<div><strong>LRS</strong> — Liquidity instability score.</div>
+<div><strong>LPI</strong> — Leverage pressure percentile.</div>
+<div><strong>LFS</strong> — Leverage fragility classification.</div>
+<div><strong>Structural Regime</strong> — 200DMA slope filter.</div>
+<div><strong>Tactical Bias</strong> — Sentiment positioning overlay.</div>
+<div><strong>ETF Flow</strong> — Institutional capital direction.</div>
+<div><strong>Liquidity Stress</strong> — Triggered derivatives instability.</div>
+<div><strong>Funding</strong> — Perpetual futures funding rate.</div>
+<div><strong>Basis %</strong> — Futures premium vs spot.</div>
+<div><strong>Open Interest</strong> — Outstanding futures contracts.</div>
+<div><strong>Overlay v2</strong> — Smooth exposure scaling engine.</div>
+</div>
 
 </body>
 </html>

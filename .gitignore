@@ -11,3 +11,13 @@ outputs/
 venv/
 
 public/daily/
+
+
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+public/daily/latest.json
+outputs/signal_history.csv

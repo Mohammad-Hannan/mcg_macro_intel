@@ -1,6 +1,13 @@
 import json
 from datetime import datetime
 
+from scripts.risk_engine import compute_crs, compute_mrg
+from scripts.overlay_engine import compute_overlay_signal
+
+from scripts.signal_formatter import format_portfolio_signal
+
+from scripts.signal_history_logger import log_daily_signal
+
 # Constants
 from scripts.config.settings import DEFAULT_ACTION, REGIME_UNCLEAR
 
@@ -34,9 +41,6 @@ from scripts.fear_greed_client import (
     classify_tactical_bias
 )
 
-# Decision engine
-from scripts.decision_engine import decide_action
-
 # PMI / Macro
 from scripts.pmi_client import (
     load_pmi_data,
@@ -47,23 +51,24 @@ from scripts.pmi_client import (
 # Output writer
 from scripts.output_writer import write_daily_output
 
+# Phase 2
+from scripts.phase2.phase2_pipeline import run_phase2
 
+
+# ---------------------------------------------------
+# Helpers
+# ---------------------------------------------------
 
 def refresh_data_if_needed(fetch_function, max_attempts=2):
-    """
-    Attempts to refetch data up to max_attempts.
-    Returns fetched data or raises last exception.
-    """
     last_exception = None
-
     for attempt in range(max_attempts):
         try:
             return fetch_function()
         except Exception as e:
             last_exception = e
             logger.warning(f"Retry attempt {attempt + 1} failed: {e}")
-
     raise last_exception
+
 
 def get_macro_regime():
     try:
@@ -85,6 +90,10 @@ def get_macro_regime():
         return REGIME_UNCLEAR, None
 
 
+# ---------------------------------------------------
+# Main Pipeline
+# ---------------------------------------------------
+
 def run_daily_pipeline():
 
     logger.info("Starting daily pipeline")
@@ -98,20 +107,21 @@ def run_daily_pipeline():
     # ---------------- BTC ----------------
     try:
         btc_df = refresh_data_if_needed(fetch_btc_history)
+
         structure = compute_moving_averages(btc_df)
         vol_regime = compute_vol_regime(btc_df)
         shock_data = compute_shock_mode(btc_df)
+
         shock_mode = shock_data["shock_mode"]
 
     except Exception as e:
         logger.error(f"BTC error: {e}")
+
         structure = {"above_50dma": "no", "above_200dma": "no"}
         vol_regime = "high"
         shock_mode = False
-        shock_data = {
-            "pct_change_24h": None,
-            "intraday_range": None
-        }
+        shock_data = {"pct_change_24h": None, "intraday_range": None}
+
         data_health = "degraded"
         health_warnings.append("BTC failure")
 
@@ -136,30 +146,41 @@ def run_daily_pipeline():
     # ---------------- PMI ----------------
     macro_regime, pmi_metrics = get_macro_regime()
 
-    # ---------------- FEAR & GREED ----------------
-    fg_data = None
-    tactical_bias = "TACTICAL_HOLD"
+    # ---------------- PHASE 2 ----------------
+    try:
+        phase2_data = run_phase2(
+            macro_regime=macro_regime,
+            intraday_range=shock_data["intraday_range"]
+        )
+    except Exception as e:
+        logger.error(f"Phase II error: {e}")
+        phase2_data = None
+        data_health = "degraded"
+        health_warnings.append("Phase II failure")
 
+    # ---------------- FEAR & GREED ----------------
     try:
         fg_data = fetch_fear_greed()
-        logger.info(f"FG RAW DATA: {fg_data}")
 
-        if fg_data and fg_data.get("value") is not None:
+        if fg_data:
             tactical_bias = classify_tactical_bias(fg_data["value"])
         else:
-            health_warnings.append("Fear & Greed returned empty")
+            tactical_bias = "TACTICAL_HOLD"
+            data_health = "degraded"
+            health_warnings.append("Fear & Greed unavailable")
 
     except Exception as e:
         logger.warning(f"Fear & Greed failure: {e}")
-        health_warnings.append("Fear & Greed API unreachable")
+        fg_data = None
+        tactical_bias = "TACTICAL_HOLD"
+        data_health = "degraded"
+        health_warnings.append("Fear & Greed failure")
 
-    # Weekend soft gating
+    # Weekend gating
     if weekend_mode and tactical_bias in ["TACTICAL_ADD_STRONG", "TACTICAL_ADD"]:
         tactical_bias = "TACTICAL_HOLD"
 
-
-    # -------- FINAL DATA HEALTH GUARD --------
-    # ---------------- HARD DATA HEALTH GUARD ----------------
+    # ---------------- HARD DATA GUARD ----------------
     if data_health != "healthy":
         logger.error("Data health check failed — aborting signal generation")
 
@@ -172,35 +193,85 @@ def run_daily_pipeline():
         }
 
         path = write_daily_output(output)
-
         logger.error(f"Output written with DATA_INVALID status to {path}")
         return
-    # ---------------- DECISION ENGINE ----------------
-    try:
-        final_action = decide_action(
-            macro_regime=macro_regime,
-            above_50dma=structure["above_50dma"],
-            above_200dma=structure["above_200dma"],
-            vol_regime=vol_regime,
-            etf_flow_regime=etf_flow_regime,
-            funding_regime=funding_regime
-        )
-    except Exception as e:
-        logger.error(f"Decision engine error: {e}")
-        final_action = DEFAULT_ACTION
 
-    # ---------------- OUTPUT ----------------
+    # ---------------------------------------------------
+    # RISK ENGINE
+    # ---------------------------------------------------
+
+    fear_value = fg_data["value"] if fg_data else None
+
+    crs = compute_crs(
+        above_50dma=structure["above_50dma"],
+        above_200dma=structure["above_200dma"],
+        volatility=vol_regime,
+        fear_greed_value=fear_value,
+        etf_flow_regime=etf_flow_regime,
+        macro_regime=macro_regime
+    )
+
+    lrs = phase2_data["liquidity_regime"]["lrs"] if phase2_data else 0
+    mrg = compute_mrg(crs, lrs)
+
+    # ---------------------------------------------------
+    # OVERLAY ENGINE
+    # ---------------------------------------------------
+
+    # ---------------- SAFE CLOSE COLUMN DETECTION ----------------
+
+    close_column = None
+
+    for col in btc_df.columns:
+        if col.lower() in ["close", "price", "btc_price"]:
+            close_column = col
+            break
+
+    if close_column is None:
+        raise ValueError(f"No valid close/price column found in BTC dataframe: {btc_df.columns}")
+
+    close_series = btc_df[close_column]
+
+    overlay = compute_overlay_signal(
+        mrg=mrg,
+        close_series=close_series
+    )
+
+
+
+    portfolio_signal = format_portfolio_signal(
+    mrg=mrg,
+    overlay=overlay
+)
+    
+    # ---------------------------------------------------
+    # OUTPUT
+    # ---------------------------------------------------
+
     output = {
         "date": today,
         "weekend_mode": weekend_mode,
         "data_health": data_health,
         "health_warnings": health_warnings,
+        "risk_engine": {
+            "crs": crs,
+            "lrs": lrs,
+            "mrg": mrg
+        },
+        "overlay": overlay,
+        "phase2": phase2_data,
         "macro_regime": macro_regime,
         "shock": {
             "shock_mode": shock_mode,
             "pct_change_24h": shock_data.get("pct_change_24h"),
             "intraday_range": shock_data.get("intraday_range")
         },
+
+
+
+        "portfolio_signal": portfolio_signal,
+
+
         "fear_greed": fg_data if fg_data else {
             "value": None,
             "classification": None,
@@ -222,15 +293,30 @@ def run_daily_pipeline():
             "pmi_3m_avg": None,
             "pmi_trend": None,
             "macro_regime": macro_regime
-        },
-        "final_action": final_action
+        }
     }
+
+    # ---------------- SIGNAL HISTORY LOG ----------------
+
+    latest_close = close_series.iloc[-1]
+
+    log_daily_signal(
+        date=today,
+        close_price=float(latest_close),
+        crs=crs,
+        lrs=lrs,
+        mrg=mrg,
+        overlay=overlay,
+        portfolio_signal=portfolio_signal
+    )
 
     path = write_daily_output(output)
 
-    logger.info(f"Final action: {final_action}")
+    logger.info(f"MRG: {mrg}")
+    logger.info(f"Overlay Exposure: {overlay['exposure_recommendation']}")
     logger.info(f"Output written to {path}")
     logger.info("Daily pipeline completed successfully")
+    logger.info("PIPELINE FINISHED CLEANLY")
 
 
 if __name__ == "__main__":
