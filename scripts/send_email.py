@@ -1,50 +1,104 @@
 def build_email(data):
+    import os
 
-    # ---- Extract safely ----
+    # ==============================
+    # SAFE EXTRACTION
+    # ==============================
+
     date = data.get("date")
     macro = data.get("macro_regime")
-    final_action = data.get("final_action")
     weekend_mode = data.get("weekend_mode", False)
     data_health = data.get("data_health", "unknown")
     warnings = data.get("health_warnings", [])
+    dashboard_url = os.getenv("DASHBOARD_URL", "Dashboard link not configured")
+
+    risk_engine = data.get("risk_engine", {})
+    overlay = data.get("overlay", {})
+    phase2 = data.get("phase2", {})
+    portfolio = data.get("portfolio_signal", {})
 
     shock = data.get("shock", {})
-    shock_mode = shock.get("shock_mode", False)
-    pct_change = shock.get("pct_change_24h")
-    intraday_range = shock.get("intraday_range")
-
     btc = data.get("btc_structure", {})
     flows = data.get("institutional_flows", {})
     funding = data.get("funding", {})
     pmi = data.get("pmi", {})
     fg = data.get("fear_greed", {})
-    tactical = data.get("tactical_bias", "TACTICAL_HOLD")
 
-    # ---- Formatting ----
-    shock_text = "🚨 SHOCK MODE ACTIVE" if shock_mode else "Normal"
+    # ==============================
+    # CORE SCORES
+    # ==============================
+
+    crs = risk_engine.get("crs")
+    lrs = risk_engine.get("lrs")
+    mrg = risk_engine.get("mrg")
+
+    exposure = overlay.get("exposure_recommendation")
+    liquidity_stress = phase2.get("liquidity_regime", {}).get("liquidity_stress")
+    lpi = phase2.get("lpi")
+    institutional_bias = phase2.get("institutional_bias")
+
+    # ETF details
+    etf_data = phase2.get("etf_flows", {})
+    flow7 = etf_data.get("flow_7d")
+    flow30 = etf_data.get("flow_30d")
+    flow_accel = etf_data.get("flow_acceleration")
+
+    # Derivatives
+    derivatives = phase2.get("derivatives", {})
+    funding_rate = derivatives.get("funding")
+    basis = derivatives.get("basis_percent")
+    oi = derivatives.get("open_interest")
+
+    # Portfolio outputs
+    allocation = portfolio.get("btc_allocation_target")
+    risk_level = portfolio.get("risk_level")
+    structural_regime = portfolio.get("structural_regime")
+    action_guidance = portfolio.get("action_guidance")
+    overlay_version = portfolio.get("overlay_version")
+
+    tactical = data.get("tactical_bias")
+
+    # ==============================
+    # FORMATTERS
+    # ==============================
+
     weekend_text = "Yes" if weekend_mode else "No"
+    shock_text = "ACTIVE 🚨" if shock.get("shock_mode") else "Normal"
 
-    if pct_change is not None:
-        pct_change = f"{round(pct_change * 100, 2)}%"
-    else:
-        pct_change = "N/A"
+    warnings_text = ", ".join(warnings) if warnings else "None"
 
-    if intraday_range is not None:
-        intraday_range = f"{round(intraday_range * 100, 2)}%"
+    if exposure is not None:
+        exposure_text = f"{round(exposure * 100, 2)}%"
     else:
-        intraday_range = "N/A"
+        exposure_text = "N/A"
+
+    if basis is not None:
+        basis_text = f"{round(basis * 100, 2)}%"
+    else:
+        basis_text = "N/A"
+
+    if funding_rate is not None:
+        funding_text = f"{round(funding_rate, 6)}"
+    else:
+        funding_text = "N/A"
+
+    liquidity_text = "STRESS ⚠️" if liquidity_stress else "Stable"
 
     fg_value = fg.get("value", "N/A")
     fg_class = fg.get("classification", "N/A")
 
-    warnings_text = ", ".join(warnings) if warnings else "None"
+    # ==============================
+    # SUBJECT
+    # ==============================
 
-    # ---- Subject ----
-    subject = f"MCG Intelligence — {final_action} | {date}"
+    subject = f"MCG Overlay v2 — {allocation} BTC | MRG {mrg} | {date}"
 
-    # ---- Body ----
+    # ==============================
+    # BODY
+    # ==============================
+
     body = f"""
-MCG INTELLIGENCE SYSTEM — DAILY UPDATE
+MCG INTELLIGENCE — DAILY SYSTEM REPORT
 Date: {date}
 
 ==================================================
@@ -52,53 +106,88 @@ SYSTEM STATUS
 ==================================================
 Data Health: {data_health.upper()}
 Warnings: {warnings_text}
-
-==================================================
-CORE DECISION
-==================================================
-Final Action: {final_action}
-Macro Regime: {macro}
-Shock Mode: {shock_text}
 Weekend Mode: {weekend_text}
 
-24h Change: {pct_change}
-Intraday Range: {intraday_range}
+==================================================
+PORTFOLIO ALLOCATION
+==================================================
+BTC Allocation Target: {allocation}
+Overlay Exposure: {exposure_text}
+Risk Level: {risk_level}
+Structural Regime: {structural_regime}
+Action Guidance: {action_guidance}
+Overlay Version: {overlay_version}
 
 ==================================================
-BTC MARKET STRUCTURE
+CORE RISK ENGINE
+==================================================
+CRS (Core Risk Score): {crs}
+LRS (Liquidity Regime Score): {lrs}
+MRG (Macro Risk Gauge): {mrg}
+
+Liquidity Stress: {liquidity_text}
+Shock Mode: {shock_text}
+
+==================================================
+PHASE 2 — LEVERAGE & LIQUIDITY
+==================================================
+LPI (Leverage Pressure Index): {lpi}
+Institutional Bias: {institutional_bias}
+
+Funding Rate: {funding_text}
+Futures Basis: {basis_text}
+Open Interest: {oi}
+
+ETF 7d Flow: {flow7}M
+ETF 30d Flow: {flow30}M
+Flow Acceleration: {flow_accel}M
+
+==================================================
+MARKET STRUCTURE
 ==================================================
 Above 50DMA: {btc.get('above_50dma')}
 Above 200DMA: {btc.get('above_200dma')}
 Volatility Regime: {btc.get('volatility')}
 
 ==================================================
-INSTITUTIONAL FLOWS
+SENTIMENT
 ==================================================
-ETF Flow Regime: {flows.get('etf_flow_regime')}
-Funding Regime: {funding.get('funding_regime')}
-
-==================================================
-SENTIMENT OVERLAY
-==================================================
-Fear & Greed Index: {fg_value} ({fg_class})
+Fear & Greed: {fg_value} ({fg_class})
 Tactical Bias: {tactical}
 
 ==================================================
-MACRO CONTEXT (PMI)
+MACRO CONTEXT
 ==================================================
 PMI: {pmi.get('pmi')}
-PMI 3M Average: {pmi.get('pmi_3m_avg')}
+PMI 3M Avg: {pmi.get('pmi_3m_avg')}
 PMI Trend: {pmi.get('pmi_trend')}
+
+==================================================
+LIVE DASHBOARD
+==================================================
+View full interactive dashboard:
+
+{dashboard_url}
+
+This link provides:
+• Allocation history
+• Risk engine breakdown
+• Liquidity regime state
+• Institutional flow data
+• Full system transparency
+
 
 ==================================================
 SYSTEM PRINCIPLES
 ==================================================
-• Macro defines permission
-• Market structure defines timing
-• Sentiment accelerates — never overrides
-• Shock logic activates separately
+• Macro defines structural permission
+• Liquidity stress modifies risk tolerance
+• Institutional flows confirm regime
+• Leverage pressure measures instability
+• Exposure scales smoothly — not binary
 
-This is a decision-support system, not a trading bot.
+This is a systematic decision-support overlay.
+Not investment advice.
 """
 
     return subject, body
