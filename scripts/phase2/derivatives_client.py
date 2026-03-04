@@ -1,31 +1,7 @@
 import requests
 
 
-DERIBIT_URL = "https://www.deribit.com/api/v2"
-
-
-# ---------------------------------------------------
-# Fetch BTC Perpetual Instrument Data
-# ---------------------------------------------------
-
-def fetch_perp_data():
-    """
-    Pull BTC-PERPETUAL market data from Deribit.
-    This contains:
-    - mark_price
-    - funding_rate
-    - open_interest
-    """
-
-    url = f"{DERIBIT_URL}/public/ticker"
-    params = {"instrument_name": "BTC-PERPETUAL"}
-
-    r = requests.get(url, params=params, timeout=10)
-    r.raise_for_status()
-
-    data = r.json()["result"]
-
-    return data
+BASE_URL = "https://www.deribit.com/api/v2"
 
 
 # ---------------------------------------------------
@@ -33,8 +9,22 @@ def fetch_perp_data():
 # ---------------------------------------------------
 
 def fetch_funding_rate():
-    data = fetch_perp_data()
-    return float(data["funding_8h"])
+    """
+    Fetch BTC perpetual funding rate from Deribit ticker
+    """
+
+    url = f"{BASE_URL}/public/ticker"
+
+    params = {
+        "instrument_name": "BTC-PERPETUAL"
+    }
+
+    r = requests.get(url, params=params, timeout=10)
+    r.raise_for_status()
+
+    data = r.json()
+
+    return float(data["result"]["funding_8h"])
 
 
 # ---------------------------------------------------
@@ -42,17 +32,39 @@ def fetch_funding_rate():
 # ---------------------------------------------------
 
 def fetch_open_interest():
-    data = fetch_perp_data()
-    return float(data["open_interest"])
+
+    url = f"{BASE_URL}/public/get_book_summary_by_instrument"
+
+    params = {
+        "instrument_name": "BTC-PERPETUAL"
+    }
+
+    r = requests.get(url, params=params, timeout=10)
+    r.raise_for_status()
+
+    data = r.json()
+
+    return float(data["result"][0]["open_interest"])
 
 
 # ---------------------------------------------------
-# Futures Price (Perpetual mark price)
+# Futures Price
 # ---------------------------------------------------
 
 def fetch_futures_price():
-    data = fetch_perp_data()
-    return float(data["mark_price"])
+
+    url = f"{BASE_URL}/public/ticker"
+
+    params = {
+        "instrument_name": "BTC-PERPETUAL"
+    }
+
+    r = requests.get(url, params=params, timeout=10)
+    r.raise_for_status()
+
+    data = r.json()
+
+    return float(data["result"]["last_price"])
 
 
 # ---------------------------------------------------
@@ -60,19 +72,20 @@ def fetch_futures_price():
 # ---------------------------------------------------
 
 def fetch_spot_price():
-    """
-    Uses Deribit BTC index price
-    """
 
-    url = f"{DERIBIT_URL}/public/get_index_price"
-    params = {"index_name": "btc_usd"}
+    url = "https://api.coingecko.com/api/v3/simple/price"
+
+    params = {
+        "ids": "bitcoin",
+        "vs_currencies": "usd"
+    }
 
     r = requests.get(url, params=params, timeout=10)
     r.raise_for_status()
 
-    data = r.json()["result"]
+    data = r.json()
 
-    return float(data["index_price"])
+    return float(data["bitcoin"]["usd"])
 
 
 # ---------------------------------------------------
