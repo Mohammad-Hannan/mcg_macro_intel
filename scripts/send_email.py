@@ -3,7 +3,7 @@ import json
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 
-from scripts.build_email import build_email
+from build_email import build_email
 
 
 def load_latest_output():
