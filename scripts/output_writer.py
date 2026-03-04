@@ -20,9 +20,9 @@ def write_daily_output(data: dict) -> str:
     latest_path = PUBLIC_DIR / "latest.json"
 
     with open(dated_path, "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, default=str)
 
     with open(latest_path, "w") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, default=str)
 
     return str(latest_path)

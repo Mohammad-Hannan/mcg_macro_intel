@@ -26,6 +26,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run daily pipeline
+        env:
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
         run: |
           python -m scripts.daily_pipeline
 
@@ -36,3 +41,4 @@ jobs:
          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+         DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
