@@ -301,8 +301,18 @@ let arrow="→";
 if(mrg>=70) arrow="↑";
 if(mrg<=30) arrow="↓";
 
-document.getElementById("mrg-hero").innerHTML=
-`${mrg.toFixed(2)} <span style="font-size:28px;opacity:0.7">${arrow}</span>`;
+const delta = data.mrg_change || 0;
+
+let deltaColor = "#9aa3b2";
+if (delta > 0) deltaColor = "#f87171";
+if (delta < 0) deltaColor = "#3ddc97";
+
+document.getElementById("mrg-hero").innerHTML =
+  `${mrg.toFixed(2)} 
+   <span style="font-size:28px;opacity:0.7">${arrow}</span>
+   <span style="font-size:18px;color:${deltaColor};margin-left:8px">
+     ${delta > 0 ? "+" : ""}${delta}
+   </span>`;
 
 document.getElementById("risk-level").innerHTML=
 `<span class="risk-pill" style="background:${riskColor(mrg)}20;color:${riskColor(mrg)};">

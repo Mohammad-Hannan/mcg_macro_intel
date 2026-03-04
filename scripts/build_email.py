@@ -1,4 +1,4 @@
-def build_email(data):
+def build_email(data, dashboard_url=None):
 
     date = data.get("date", "N/A")
 
@@ -16,6 +16,7 @@ def build_email(data):
     crs = risk.get("crs", "N/A")
     lrs = risk.get("lrs", "N/A")
     mrg = risk.get("mrg", "N/A")
+    delta_mrg = data.get("mrg_change", 0)
 
     overlay = data.get("overlay", {})
     exposure = overlay.get("exposure_recommendation", "N/A")
@@ -56,7 +57,7 @@ def build_email(data):
 
     # ---------------- SUBJECT ----------------
 
-    subject = f"MCG Intelligence — MRG {mrg} | {date}"
+    subject = f"MCG Intelligence — MRG {mrg} ({delta_mrg:+}) | {date}"
 
     # ---------------- BODY ----------------
 
@@ -116,6 +117,16 @@ SYSTEM PRINCIPLES
 • Shock logic activates independently
 
 This is a decision-support system, not a trading bot.
+"""
+
+    if dashboard_url:
+        body += f"""
+
+==================================================
+DASHBOARD
+==================================================
+View the full dashboard here:
+{dashboard_url}
 """
 
     return subject, body

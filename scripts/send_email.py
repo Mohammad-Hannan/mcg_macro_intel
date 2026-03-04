@@ -28,7 +28,8 @@ def send_email():
 
     data = load_latest_output()
 
-    subject, body = build_email(data)
+    dashboard_url = os.environ.get("DASHBOARD_URL")
+    subject, body = build_email(data, dashboard_url)
 
     if dashboard_url:
         body += f"\n\nDashboard:\n{dashboard_url}"
