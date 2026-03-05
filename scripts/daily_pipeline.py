@@ -6,6 +6,8 @@ from scripts.overlay_engine import compute_overlay_signal
 from scripts.signal_formatter import format_portfolio_signal
 from scripts.signal_history_logger import log_daily_signal
 from scripts.mrg_tracker import compute_delta_mrg, save_today_mrg
+from scripts.mrg_tracker import load_history
+from scripts.risk_regime import classify_risk_regime
 
 from scripts.config.settings import DEFAULT_ACTION, REGIME_UNCLEAR
 from scripts.logger import get_logger
@@ -188,6 +190,11 @@ def run_daily_pipeline():
     save_today_mrg(mrg)
 
     # ---------------------------------------------------
+
+
+    risk_regime = classify_risk_regime(mrg)
+
+     # ---------------------------------------------------
     # OVERLAY ENGINE
     # ---------------------------------------------------
 
@@ -213,6 +220,10 @@ def run_daily_pipeline():
         overlay=overlay
     )
 
+    history_df = load_history()
+
+    mrg_history = history_df.tail(30).to_dict("records")
+
     # ---------------------------------------------------
     # OUTPUT
     # ---------------------------------------------------
@@ -223,6 +234,8 @@ def run_daily_pipeline():
         "data_health": data_health,
         "health_warnings": health_warnings,
 
+        "risk_regime": risk_regime,
+
         "risk_engine": {
             "crs": crs,
             "lrs": lrs,
@@ -230,6 +243,7 @@ def run_daily_pipeline():
         },
 
         "mrg_change": delta_mrg,
+        "mrg_history": mrg_history,
 
         "overlay": overlay,
         "phase2": phase2_data,

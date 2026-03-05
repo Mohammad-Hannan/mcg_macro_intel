@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>MCG Intelligence</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 :root {
   --bg: #0b0f17;
@@ -220,8 +222,19 @@ h1 {
 <div class="subtle">Macro Risk Gauge</div>
 <div class="headline" id="mrg-hero"></div>
 <div style="margin-top:15px;" id="risk-level"></div>
+
+<div class="subtle">Risk Regime</div>
+<div class="value" id="risk-regime"></div>
+
 </div>
 </div>
+</div>
+
+
+
+<div class="panel">
+  <div class="subtle">Macro Risk Trend (30d)</div>
+  <canvas id="mrgChart" height="120"></canvas>
 </div>
 
 <!-- SYSTEM META -->
@@ -278,6 +291,36 @@ h1 {
 </div>
 
 <script>
+
+const history = data.mrg_history || [];
+
+const labels = history.map(h => h.date);
+const values = history.map(h => h.mrg);
+
+const ctx = document.getElementById("mrgChart");
+
+new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: labels,
+    datasets: [{
+      label: "MRG",
+      data: values,
+      tension: 0.4,
+      borderWidth: 2
+    }]
+  },
+  options: {
+    plugins: { legend: { display:false } },
+    scales: {
+      y: {
+        min:0,
+        max:100
+      }
+    }
+  }
+});
+
 function riskColor(mrg){
 if(mrg>=70) return "var(--red)";
 if(mrg<=30) return "var(--green)";
@@ -380,6 +423,10 @@ document.getElementById("dictionaryPanel").classList.remove("open");
 document.getElementById("overlayDim").classList.remove("active");
 document.body.classList.remove("panel-open");
 }
+
+document.getElementById("risk-regime").innerText = data.risk_regime;
+
+
 </script>
 
 <div class="sidepanel-toggle" onclick="togglePanel()">
