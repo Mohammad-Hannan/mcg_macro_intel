@@ -19,5 +19,7 @@ __pycache__/
 *.pyo
 *.pyd
 .env
-public/daily/latest.json
+public/*
+!public/daily/
+!public/daily/latest.json
 outputs/signal_history.csv
