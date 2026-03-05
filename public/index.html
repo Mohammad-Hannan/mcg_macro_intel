@@ -327,7 +327,7 @@ if(mrg<=30) return "var(--green)";
 return "var(--yellow)";
 }
 
-fetch("/mcg_macro_intel/daily/latest.json?v="+new Date().getTime())
+fetch("/mcg_macro_intel/daily/latest.json?v=" + Date.now())
 .then(res=>res.json())
 .then(data=>{
 const portfolio=data.portfolio_signal;
