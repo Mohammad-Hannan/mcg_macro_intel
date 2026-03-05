@@ -1,0 +1,98 @@
+{
+  "date": "2026-03-05",
+  "weekend_mode": false,
+  "data_health": "healthy",
+  "health_warnings": [],
+  "risk_regime": "CRISIS",
+  "risk_engine": {
+    "crs": 60,
+    "lrs": 8,
+    "mrg": 72.0
+  },
+  "mrg_change": 0,
+  "mrg_history": [
+    {
+      "date": "2026-03-05",
+      "mrg": 72.0
+    }
+  ],
+  "overlay": {
+    "exposure_recommendation": 0.4,
+    "bear_regime": true,
+    "regime_state": "HIGH",
+    "overlay_version": "MCG Overlay v2"
+  },
+  "phase2": {
+    "lpi": 83.62,
+    "lfs": "EXPANSION",
+    "institutional_bias": "DISTRIBUTING",
+    "liquidity_regime": {
+      "lrs": 8,
+      "liquidity_stress": false,
+      "components": {
+        "oi_compression": 0,
+        "funding_instability": 3,
+        "oi_price_divergence": 5,
+        "volatility_expansion": 0
+      }
+    },
+    "etf_flows": {
+      "flow_7d": -652.1,
+      "flow_30d": -1611.7,
+      "flow_acceleration": 959.6
+    },
+    "derivatives": {
+      "funding": 3.028e-05,
+      "funding_delta": 3.028e-05,
+      "basis_percent": -0.00021196291332768098,
+      "basis_delta": -0.00027034002949814215,
+      "open_interest": 1045285530.0,
+      "oi_change": 0.03542311448034358,
+      "price_change": 0.06722124927028605
+    },
+    "liquidity_ok": false,
+    "market_structure": "NEUTRAL",
+    "permissions": {
+      "allow_carry": "False",
+      "allow_vol_selling": false,
+      "favor_spot": false
+    }
+  },
+  "macro_regime": "REGIME_UNCLEAR",
+  "shock": {
+    "shock_mode": false,
+    "pct_change_24h": 0.006331400166873153,
+    "intraday_range": 0.006291565746456148
+  },
+  "portfolio_signal": {
+    "btc_allocation_target": "40%",
+    "risk_level": "High",
+    "action_guidance": "Trim exposure. Avoid adding risk.",
+    "structural_regime": "Structural Bear Regime (200DMA Downtrend)",
+    "overlay_version": "MCG Overlay v2"
+  },
+  "fear_greed": {
+    "value": 22,
+    "classification": "extreme_fear",
+    "timestamp": "1772668800",
+    "source": "alternative_me"
+  },
+  "tactical_bias": "TACTICAL_ADD",
+  "btc_structure": {
+    "above_50dma": "no",
+    "above_200dma": "no",
+    "volatility": "high"
+  },
+  "institutional_flows": {
+    "etf_flow_regime": "negative"
+  },
+  "funding": {
+    "funding_regime": "neutral"
+  },
+  "pmi": {
+    "period": "2025-12",
+    "pmi": 52.8,
+    "pmi_3m_avg": 53.4,
+    "pmi_trend": "FALLING"
+  }
+}
