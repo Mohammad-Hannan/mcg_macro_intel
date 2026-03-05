@@ -7,10 +7,22 @@ HISTORY_PATH = "data/mrg_history.csv"
 
 def load_history():
 
+    # If file doesn't exist, return empty structure
     if not os.path.exists(HISTORY_PATH):
         return pd.DataFrame(columns=["date", "mrg"])
 
-    return pd.read_csv(HISTORY_PATH)
+    try:
+        df = pd.read_csv(HISTORY_PATH)
+
+        # If file exists but is empty
+        if df.empty or "mrg" not in df.columns:
+            return pd.DataFrame(columns=["date", "mrg"])
+
+        return df
+
+    except Exception:
+        # Handles EmptyDataError and any corrupted CSV
+        return pd.DataFrame(columns=["date", "mrg"])
 
 
 def save_today_mrg(mrg):
@@ -33,6 +45,7 @@ def compute_delta_mrg(current_mrg):
 
     df = load_history()
 
+    # First run case
     if len(df) == 0:
         return 0
 
