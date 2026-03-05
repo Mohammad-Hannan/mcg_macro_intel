@@ -9,7 +9,7 @@
 
 <!-- YOUR ENTIRE CSS IS UNCHANGED -->
 <style>
-<style>
+
 :root {
   --bg: #0b0f17;
   --panel: rgba(255,255,255,0.04);
@@ -19,6 +19,18 @@
   --green: #3ddc97;
   --yellow: #facc15;
   --red: #f87171;
+}
+
+/* ensure text visibility */
+body,
+.panel,
+.value,
+.headline,
+.subtle,
+.label,
+.meta-grid,
+.grid {
+  color: var(--text);
 }
 
 body {
@@ -119,19 +131,24 @@ h1 {
   50% { box-shadow: 0 0 18px rgba(61,220,151,0.45); }
   100% { box-shadow: 0 0 0px rgba(61,220,151,0.0); }
 }
-.tactical-glow { animation: glow-green 2s infinite ease-in-out; }
+
+.tactical-glow {
+  animation: glow-green 2s infinite ease-in-out;
+}
 
 @keyframes pulse-red {
   0% { box-shadow: 0 0 0px rgba(248,113,113,0.0); }
   50% { box-shadow: 0 0 25px rgba(248,113,113,0.6); }
   100% { box-shadow: 0 0 0px rgba(248,113,113,0.0); }
 }
+
 .liquidity-alert {
   animation: pulse-red 1.8s infinite ease-in-out;
   border: 1px solid rgba(248,113,113,0.5);
 }
 
 /* DIM OVERLAY */
+
 .overlay-dim {
   position: fixed;
   inset: 0;
@@ -142,12 +159,14 @@ h1 {
   transition: 0.3s ease;
   z-index: 900;
 }
+
 .overlay-dim.active {
   opacity: 1;
   pointer-events: all;
 }
 
 /* SIDE PANEL */
+
 .sidepanel {
   position: fixed;
   top: 0;
@@ -162,6 +181,7 @@ h1 {
   transition: right 0.35s ease;
   z-index: 1000;
 }
+
 .sidepanel.open { right: 0; }
 
 .sidepanel h2 {
@@ -197,11 +217,12 @@ h1 {
   z-index: 1100;
   font-size: 12px;
 }
+
 .sidepanel-toggle span {
   font-size: 20px;
   font-weight: 600;
 }
-</style>
+
 </style>
 </head>
 
@@ -430,8 +451,28 @@ document.body.classList.remove("panel-open");
 }
 
 </script>
+<div class="sidepanel-toggle" onclick="togglePanel()">
+<span>?</span>
+GUIDE
+</div>
 
-<!-- GUIDE PANEL (UNCHANGED) -->
+<div id="dictionaryPanel" class="sidepanel">
+<h2>System Dictionary</h2>
+<div><strong>MRG</strong> — Macro Risk Gauge (0–100). Composite systemic risk score.</div>
+<div><strong>CRS</strong> — Structural + macro baseline risk.</div>
+<div><strong>LRS</strong> — Liquidity instability score.</div>
+<div><strong>LPI</strong> — Leverage pressure percentile.</div>
+<div><strong>LFS</strong> — Leverage fragility classification.</div>
+<div><strong>Structural Regime</strong> — 200DMA slope filter.</div>
+<div><strong>Tactical Bias</strong> — Sentiment positioning overlay.</div>
+<div><strong>ETF Flow</strong> — Institutional capital direction.</div>
+<div><strong>Liquidity Stress</strong> — Triggered derivatives instability.</div>
+<div><strong>Funding</strong> — Perpetual futures funding rate.</div>
+<div><strong>Basis %</strong> — Futures premium vs spot.</div>
+<div><strong>Open Interest</strong> — Outstanding futures contracts.</div>
+<div><strong>Overlay v2</strong> — Smooth exposure scaling engine.</div>
+</div>
+
 
 </body>
 </html>
