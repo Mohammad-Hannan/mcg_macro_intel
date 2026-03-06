@@ -9,7 +9,7 @@
     "lrs": 0,
     "mrg": 55.0
   },
-  "mrg_change": -20.0,
+  "mrg_change": 0.0,
   "mrg_history": [
     {
       "date": "2026-03-05",
@@ -26,6 +26,10 @@
     {
       "date": "2026-03-05",
       "mrg": 75.0
+    },
+    {
+      "date": "2026-03-06",
+      "mrg": 55.0
     },
     {
       "date": "2026-03-06",
@@ -60,11 +64,11 @@
     "derivatives": {
       "funding": -3.3e-07,
       "funding_delta": -3.3e-07,
-      "basis_percent": 0.00045109178308123883,
-      "basis_delta": 0.00039271466691077764,
-      "open_interest": 1036271390.0,
-      "oi_change": 0.02649402415498354,
-      "price_change": 0.035303561004086395
+      "basis_percent": 0.0005991569509255213,
+      "basis_delta": 0.0005407798347550601,
+      "open_interest": 1036333280.0,
+      "oi_change": 0.026555330214156854,
+      "price_change": 0.035215995329830704
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -77,8 +81,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.0010025155350838395,
-    "intraday_range": 0.0010015115042422715
+    "pct_change_24h": 0.0008211467846959831,
+    "intraday_range": 0.0008204730558842141
   },
   "portfolio_signal": {
     "btc_allocation_target": "54%",
