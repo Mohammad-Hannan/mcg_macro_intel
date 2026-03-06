@@ -42,6 +42,10 @@
     {
       "date": "2026-03-06",
       "mrg": 55.0
+    },
+    {
+      "date": "2026-03-06",
+      "mrg": 55.0
     }
   ],
   "overlay": {
@@ -51,7 +55,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 50.93,
+    "lpi": 60.17,
     "lfs": "EXPANSION",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -70,13 +74,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": -3.7e-07,
-      "funding_delta": -3.7e-07,
-      "basis_percent": -2.8100148930789334e-05,
-      "basis_delta": -8.647726510125051e-05,
-      "open_interest": 1034929520.0,
-      "oi_change": 0.02516481488655739,
-      "price_change": 0.03873321657910099
+      "funding": 0.0,
+      "funding_delta": 0.0,
+      "basis_percent": 0.0012764146929513545,
+      "basis_delta": 0.0012180375767808934,
+      "open_interest": 1036913130.0,
+      "oi_change": 0.027129709248114618,
+      "price_change": 0.029042615294804435
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -89,8 +93,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.004185611175984903,
-    "intraday_range": 0.004168164858569527
+    "pct_change_24h": -0.005432176383990057,
+    "intraday_range": 0.005461846095362272
   },
   "portfolio_signal": {
     "btc_allocation_target": "54%",
