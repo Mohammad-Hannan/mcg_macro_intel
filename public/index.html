@@ -491,8 +491,8 @@ document.getElementById("tactical").innerHTML=
 ${bias.replace("TACTICAL_","").replace(/_/g," ")}
 </span>`;
 
-document.getElementById("crs").innerText=risk?.crs;
-document.getElementById("lrs").innerText=risk?.lrs;
+document.getElementById("crs").innerText=riskEngine?.crs;
+document.getElementById("lrs").innerText=riskEngine?.lrs;
 document.getElementById("mrg-breakdown").innerText=mrg.toFixed(2);
 
 document.getElementById("lpi").innerText=phase2?.lpi;
