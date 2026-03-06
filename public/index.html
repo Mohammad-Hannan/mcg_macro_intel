@@ -346,7 +346,7 @@ fetch("daily/latest.json?v=" + Date.now())
 .then(data=>{
 
 const portfolio=data.portfolio_signal;
-const risk=data.risk_engine;
+const riskRegime=data.risk_engine;
 const overlay=data.overlay;
 const phase2=data.phase2;
 
@@ -372,7 +372,7 @@ let liqColor=liquidity==="STRESS"?"status-red":"status-green";
 
 statusBar.innerHTML=
 pill("MACRO",macro,"status-blue")+
-pill("RISK",risk,riskStatusColor)+
+pill("RISK",rriskRegime,riskStatusColor)+
 pill("LIQUIDITY",liquidity,liqColor)+
 pill("SENTIMENT",sentiment,"status-yellow")+
 pill("STRUCTURE",structure,structure==="BULL"?"status-green":"status-red");
