@@ -6,6 +6,7 @@
 <title>MCG Intelligence</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
 
 <!-- YOUR ENTIRE CSS IS UNCHANGED -->
 <style>
@@ -341,8 +342,36 @@ borderWidth:2
 }]
 },
 options:{
-plugins:{legend:{display:false}},
-scales:{y:{min:0,max:100}}
+plugins:{
+legend:{display:false},
+annotation:{
+annotations:{
+lowRisk:{
+type:'box',
+yMin:0,
+yMax:30,
+backgroundColor:'rgba(61,220,151,0.08)'
+},
+neutral:{
+type:'box',
+yMin:30,
+yMax:70,
+backgroundColor:'rgba(250,204,21,0.06)'
+},
+highRisk:{
+type:'box',
+yMin:70,
+yMax:100,
+backgroundColor:'rgba(248,113,113,0.08)'
+}
+}
+}
+},
+scales:{
+y:{
+min:0,
+max:100
+}
 }
 });
 
