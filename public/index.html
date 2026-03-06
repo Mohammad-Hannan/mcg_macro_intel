@@ -359,7 +359,7 @@ const phase2=data.phase2;
 const statusBar=document.getElementById("statusBar");
 
 const macro=data.macro_regime||"N/A";
-const risk=data.risk_regime||"N/A";
+const riskRegime=data.risk_regime||"N/A";
 const sentiment=data.fear_greed?.classification||"N/A";
 const structure=data.btc_structure?.above_200dma==="yes"?"BULL":"BEAR";
 const liquidity=phase2?.liquidity_regime?.liquidity_stress?"STRESS":"STABLE";
@@ -376,7 +376,7 @@ let liqColor=liquidity==="STRESS"?"status-red":"status-green";
 
 statusBar.innerHTML=
 pill("MACRO",macro,"status-blue")+
-pill("RISK",riskRegime,riskStatusColor)+
+pill("RISK", riskRegime, riskStatusColor)
 pill("LIQUIDITY",liquidity,liqColor)+
 pill("SENTIMENT",sentiment,"status-yellow")+
 pill("STRUCTURE",structure,structure==="BULL"?"status-green":"status-red");
