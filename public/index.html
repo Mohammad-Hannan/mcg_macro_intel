@@ -224,6 +224,26 @@ h1 {
   font-weight: 600;
 }
 
+.status-bar{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:35px;
+}
+
+.status-pill{
+padding:6px 14px;
+border-radius:100px;
+font-size:12px;
+font-weight:600;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.status-green{background:rgba(61,220,151,0.15);color:#3ddc97;}
+.status-yellow{background:rgba(250,204,21,0.15);color:#facc15;}
+.status-red{background:rgba(248,113,113,0.15);color:#f87171;}
+.status-blue{background:rgba(96,165,250,0.15);color:#60a5fa;}
+
 </style>
 </head>
 
@@ -233,6 +253,7 @@ h1 {
 
 <div class="container">
 <h1>MCG Intelligence</h1>
+<div class="status-bar" id="statusBar"></div>
 
 <!-- HERO -->
 <div class="panel">
@@ -324,6 +345,38 @@ fetch("daily/latest.json?v=" + Date.now())
 .then(res=>res.json())
 .then(data=>{
 
+const portfolio=data.portfolio_signal;
+const risk=data.risk_engine;
+const overlay=data.overlay;
+const phase2=data.phase2;
+
+
+
+const statusBar=document.getElementById("statusBar");
+
+const macro=data.macro_regime||"N/A";
+const risk=data.risk_regime||"N/A";
+const sentiment=data.fear_greed?.classification||"N/A";
+const structure=data.btc_structure?.above_200dma==="yes"?"BULL":"BEAR";
+const liquidity=phase2?.liquidity_regime?.liquidity_stress?"STRESS":"STABLE";
+
+function pill(label,value,color){
+return `<span class="status-pill ${color}">${label}: ${value}</span>`;
+}
+
+let riskStatusColor="status-yellow";
+if(risk==="CRISIS") riskStatusColor="status-red";
+if(risk==="LOW") riskStatusColor="status-green";
+
+let liqColor=liquidity==="STRESS"?"status-red":"status-green";
+
+statusBar.innerHTML=
+pill("MACRO",macro,"status-blue")+
+pill("RISK",risk,riskStatusColor)+
+pill("LIQUIDITY",liquidity,liqColor)+
+pill("SENTIMENT",sentiment,"status-yellow")+
+pill("STRUCTURE",structure,structure==="BULL"?"status-green":"status-red");
+
 /* --------- FIX 1: chart moved inside fetch --------- */
 
 const history = data.mrg_history || [];
@@ -377,10 +430,6 @@ max:100
 
 /* --------- original dashboard logic --------- */
 
-const portfolio=data.portfolio_signal;
-const risk=data.risk_engine;
-const overlay=data.overlay;
-const phase2=data.phase2;
 
 const mrg=risk?.mrg||0;
 const exposure=overlay?.exposure_recommendation||0;
