@@ -350,7 +350,7 @@ fetch("daily/latest.json?v=" + Date.now())
 .then(data=>{
 
 const portfolio=data.portfolio_signal;
-const riskRegime=data.risk_engine;
+const riskEngine=data.risk_engine;
 const overlay=data.overlay;
 const phase2=data.phase2;
 
@@ -438,7 +438,7 @@ max:100
 /* --------- original dashboard logic --------- */
 
 
-const mrg=risk?.mrg||0;
+const mrg=riskEngine?.mrg||0;
 const exposure=overlay?.exposure_recommendation||0;
 
 document.getElementById("allocation").innerText=portfolio?.btc_allocation_target||"—";
