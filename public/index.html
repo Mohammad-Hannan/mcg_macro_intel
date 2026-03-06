@@ -369,8 +369,8 @@ return `<span class="status-pill ${color}">${label}: ${value}</span>`;
 }
 
 let riskStatusColor="status-yellow";
-if(risk==="CRISIS") riskStatusColor="status-red";
-if(risk==="LOW") riskStatusColor="status-green";
+if(riskRegime==="CRISIS") riskStatusColor="status-red";
+if(riskRegime==="LOW") riskStatusColor="status-green";
 
 let liqColor=liquidity==="STRESS"?"status-red":"status-green";
 
