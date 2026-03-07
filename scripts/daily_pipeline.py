@@ -95,25 +95,38 @@ def run_daily_pipeline():
     health_warnings = []
 
     # ---------------- BTC ----------------
-    try:
-        btc_df = refresh_data_if_needed(fetch_btc_history)
+try:
+    btc_df = refresh_data_if_needed(fetch_btc_history)
 
-        structure = compute_moving_averages(btc_df)
-        vol_regime = compute_vol_regime(btc_df)
-        shock_data = compute_shock_mode(btc_df)
+except Exception as e:
+    logger.error(f"BTC error: {e}")
+    btc_df = None
 
-        shock_mode = shock_data["shock_mode"]
+if btc_df is not None and not btc_df.empty:
+    structure = compute_moving_averages(btc_df)
+    vol_regime = compute_vol_regime(btc_df)
+    shock_data = compute_shock_mode(btc_df)
 
-    except Exception as e:
-        logger.error(f"BTC error: {e}")
+    shock_mode = shock_data["shock_mode"]
 
-        structure = {"above_50dma": "no", "above_200dma": "no"}
-        vol_regime = "high"
-        shock_mode = False
-        shock_data = {"pct_change_24h": None, "intraday_range": None}
+else:
+    logger.warning("BTC data unavailable — using safe defaults")
 
-        data_health = "degraded"
-        health_warnings.append("BTC failure")
+    structure = {
+        "above_50dma": "unknown",
+        "above_200dma": "unknown",
+        "volatility": "unknown"
+    }
+
+    vol_regime = "unknown"
+
+    shock_data = {
+        "shock_mode": False,
+        "pct_change_24h": 0,
+        "intraday_range": 0
+    }
+
+    shock_mode = False
 
     # ---------------- ETF ----------------
     try:

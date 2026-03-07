@@ -11,24 +11,34 @@ def fetch_btc_history(days=365):
     Fetch daily BTC price history from CoinGecko.
     Returns DataFrame with columns: date, price
     """
+
     params = {
         "vs_currency": "usd",
         "days": days
     }
 
-    r = requests.get(COINGECKO_URL, params=params, timeout=20)
-    r.raise_for_status()
+    for attempt in range(3):
+        try:
+            r = requests.get(COINGECKO_URL, params=params, timeout=20)
+            r.raise_for_status()
 
-    data = r.json().get("prices", [])
-    if not data:
-        raise ValueError("No BTC price data returned from CoinGecko")
+            data = r.json().get("prices", [])
+            if not data:
+                raise ValueError("No BTC price data returned from CoinGecko")
 
-    df = pd.DataFrame(data, columns=["timestamp", "price"])
-    df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
-    df["price"] = pd.to_numeric(df["price"], errors="coerce")
+            df = pd.DataFrame(data, columns=["timestamp", "price"])
+            df["date"] = pd.to_datetime(df["timestamp"], unit="ms")
+            df["price"] = pd.to_numeric(df["price"], errors="coerce")
 
-    df = df.dropna().reset_index(drop=True)
-    return df[["date", "price"]]
+            df = df.dropna().reset_index(drop=True)
+            return df[["date", "price"]]
+
+        except Exception as e:
+            if attempt == 2:
+                raise e
+
+            logger.warning(f"CoinGecko BTC retry {attempt+1} failed: {e}")
+            time.sleep(5)
 
 
 def compute_moving_averages(df):
