@@ -96,7 +96,7 @@ def run_daily_pipeline():
 
     # ---------------- BTC ----------------
 try:
-    btc_df = refresh_data_if_needed(fetch_btc_history)
+    btc_df = fetch_btc_history()
 
 except Exception as e:
     logger.error(f"BTC error: {e}")
