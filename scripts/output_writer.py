@@ -13,8 +13,11 @@ PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
 def write_daily_output(data: dict) -> str:
     today = datetime.utcnow().strftime("%Y-%m-%d")
 
-    # Force correct date every run
+    # force new date every run
     data["date"] = today
+
+    # add pipeline timestamp so file always changes
+    data["pipeline_run"] = datetime.utcnow().isoformat()
 
     dated_path = OUTPUT_DIR / f"mcg_daily_{today}.json"
     latest_path = PUBLIC_DIR / "latest.json"
