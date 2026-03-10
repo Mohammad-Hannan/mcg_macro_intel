@@ -298,6 +298,10 @@ else:
             "macro_regime": macro_regime
         }
     }
+    # FORCE fresh report date
+    output["date"] = datetime.utcnow().strftime("%Y-%m-%d")
+
+    write_daily_output(output)
 
     latest_close = close_series.iloc[-1]
 
