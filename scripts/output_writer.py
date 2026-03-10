@@ -19,8 +19,15 @@ def write_daily_output(data: dict) -> str:
     # add pipeline timestamp so file always changes
     data["pipeline_run"] = datetime.utcnow().isoformat()
 
+
     dated_path = OUTPUT_DIR / f"mcg_daily_{today}.json"
     latest_path = PUBLIC_DIR / "latest.json"
+
+
+
+    OUTPUT_DIR.mkdir(exist_ok=True)
+    PUBLIC_DIR.mkdir(parents=True, exist_ok=True)
+ 
 
     with open(dated_path, "w") as f:
         json.dump(data, f, indent=2, default=str)

@@ -8,6 +8,7 @@ from scripts.signal_history_logger import log_daily_signal
 from scripts.mrg_tracker import compute_delta_mrg, save_today_mrg
 from scripts.mrg_tracker import load_history
 from scripts.risk_regime import classify_risk_regime
+from scripts.output_writer import write_daily_output
 
 from scripts.config.settings import DEFAULT_ACTION, REGIME_UNCLEAR
 from scripts.logger import get_logger
@@ -87,6 +88,7 @@ def get_macro_regime():
 def run_daily_pipeline():
 
     logger.info("Starting daily pipeline")
+    print("PIPELINE STARTED")
 
     today = datetime.utcnow().strftime("%Y-%m-%d")
     weekend_mode = datetime.utcnow().weekday() >= 5
@@ -95,38 +97,34 @@ def run_daily_pipeline():
     health_warnings = []
 
     # ---------------- BTC ----------------
-try:
-    btc_df = fetch_btc_history()
+    try:
+        btc_df = fetch_btc_history()
+    except Exception as e:
+        logger.error(f"BTC error: {e}")
+        btc_df = None
 
-except Exception as e:
-    logger.error(f"BTC error: {e}")
-    btc_df = None
+    if btc_df is not None and not btc_df.empty:
+        structure = compute_moving_averages(btc_df)
+        vol_regime = compute_vol_regime(btc_df)
+        shock_data = compute_shock_mode(btc_df)
+        shock_mode = shock_data["shock_mode"]
+    else:
+        logger.warning("BTC data unavailable — using safe defaults")
 
-if btc_df is not None and not btc_df.empty:
-    structure = compute_moving_averages(btc_df)
-    vol_regime = compute_vol_regime(btc_df)
-    shock_data = compute_shock_mode(btc_df)
+        structure = {
+            "above_50dma": "unknown",
+            "above_200dma": "unknown",
+        }
 
-    shock_mode = shock_data["shock_mode"]
+        vol_regime = "unknown"
 
-else:
-    logger.warning("BTC data unavailable — using safe defaults")
+        shock_data = {
+            "shock_mode": False,
+            "pct_change_24h": 0,
+            "intraday_range": 0
+        }
 
-    structure = {
-        "above_50dma": "unknown",
-        "above_200dma": "unknown",
-        "volatility": "unknown"
-    }
-
-    vol_regime = "unknown"
-
-    shock_data = {
-        "shock_mode": False,
-        "pct_change_24h": 0,
-        "intraday_range": 0
-    }
-
-    shock_mode = False
+        shock_mode = False
 
     # ---------------- ETF ----------------
     try:
@@ -178,10 +176,7 @@ else:
     if weekend_mode and tactical_bias in ["TACTICAL_ADD_STRONG", "TACTICAL_ADD"]:
         tactical_bias = "TACTICAL_HOLD"
 
-    # ---------------------------------------------------
-    # RISK ENGINE
-    # ---------------------------------------------------
-
+    # ---------------- RISK ENGINE ----------------
     fear_value = fg_data["value"] if fg_data else None
 
     crs = compute_crs(
@@ -196,32 +191,19 @@ else:
     lrs = phase2_data["liquidity_regime"]["lrs"] if phase2_data else 0
     mrg = compute_mrg(crs, lrs)
 
-    # ---------------- ΔMRG CALCULATION ----------------
-
     delta_mrg = compute_delta_mrg(mrg)
-
     save_today_mrg(mrg)
-
-    # ---------------------------------------------------
-
 
     risk_regime = classify_risk_regime(mrg)
 
-     # ---------------------------------------------------
-    # OVERLAY ENGINE
-    # ---------------------------------------------------
+    # ---------------- OVERLAY ----------------
+    close_series = None
 
-    close_column = None
-
-    for col in btc_df.columns:
-        if col.lower() in ["close", "price", "btc_price"]:
-            close_column = col
-            break
-
-    if close_column is None:
-        raise ValueError(f"No valid close/price column found in BTC dataframe")
-
-    close_series = btc_df[close_column]
+    if btc_df is not None and not btc_df.empty:
+        for col in btc_df.columns:
+            if col.lower() in ["close", "price", "btc_price"]:
+                close_series = btc_df[col]
+                break
 
     overlay = compute_overlay_signal(
         mrg=mrg,
@@ -233,14 +215,11 @@ else:
         overlay=overlay
     )
 
+    # ---------------- HISTORY ----------------
     history_df = load_history()
-
     mrg_history = history_df.tail(30).to_dict("records")
 
-    # ---------------------------------------------------
-    # OUTPUT
-    # ---------------------------------------------------
-
+    # ---------------- OUTPUT ----------------
     output = {
         "date": today,
         "weekend_mode": weekend_mode,
@@ -298,31 +277,35 @@ else:
             "macro_regime": macro_regime
         }
     }
-    # FORCE fresh report date
+
+    # force fresh date
     output["date"] = datetime.utcnow().strftime("%Y-%m-%d")
 
-    write_daily_output(output)
-
-    latest_close = close_series.iloc[-1]
-
-    log_daily_signal(
-        date=today,
-        close_price=float(latest_close),
-        crs=crs,
-        lrs=lrs,
-        mrg=mrg,
-        overlay=overlay,
-        portfolio_signal=portfolio_signal
-    )
-
+    print("WRITING OUTPUT FILE")
     path = write_daily_output(output)
+
+    logger.info("Daily output written successfully")
+    logger.info(f"Output written to {path}")
+
+    if close_series is not None:
+        latest_close = close_series.iloc[-1]
+
+        log_daily_signal(
+            date=output["date"],
+            close_price=float(latest_close),
+            crs=crs,
+            lrs=lrs,
+            mrg=mrg,
+            overlay=overlay,
+            portfolio_signal=portfolio_signal
+        )
 
     logger.info(f"MRG: {mrg}")
     logger.info(f"MRG Change: {delta_mrg}")
     logger.info(f"Overlay Exposure: {overlay['exposure_recommendation']}")
-    logger.info(f"Output written to {path}")
     logger.info("Daily pipeline completed successfully")
     logger.info("PIPELINE FINISHED CLEANLY")
+
 
 
 if __name__ == "__main__":
