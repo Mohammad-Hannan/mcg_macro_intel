@@ -1,5 +1,5 @@
 {
-  "date": "2026-03-16",
+  "date": "2026-03-17",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
@@ -9,7 +9,7 @@
     "lrs": 5,
     "mrg": 39.38
   },
-  "mrg_change": 7.13,
+  "mrg_change": 0.0,
   "mrg_history": [
     {
       "date": "2026-03-05",
@@ -78,6 +78,10 @@
     {
       "date": "2026-03-16",
       "mrg": 39.38
+    },
+    {
+      "date": "2026-03-17",
+      "mrg": 39.38
     }
   ],
   "overlay": {
@@ -106,13 +110,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 3.68e-06,
-      "funding_delta": 2.39e-06,
-      "basis_percent": 0.00044655543376770997,
-      "basis_delta": 0.0007040366948537088,
-      "open_interest": 977397090.0,
-      "oi_change": -0.039831576880042185,
-      "price_change": 0.05708931738856783
+      "funding": 6.9e-06,
+      "funding_delta": 5.6100000000000005e-06,
+      "basis_percent": 0.00032397408207343413,
+      "basis_delta": 0.0005814553431594329,
+      "open_interest": 973530620.0,
+      "oi_change": -0.04362989226375243,
+      "price_change": 0.0596784345139326
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -125,8 +129,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.01666500342894906,
-    "intraday_range": 0.01639183346799811
+    "pct_change_24h": -0.010389914152664626,
+    "intraday_range": 0.010498997838899807
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -136,9 +140,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 23,
-    "classification": "extreme_fear",
-    "timestamp": "1773619200",
+    "value": 28,
+    "classification": "fear",
+    "timestamp": "1773705600",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_ADD",
@@ -159,5 +163,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-03-16T07:12:23.161384"
+  "pipeline_run": "2026-03-17T07:00:14.183055"
 }
