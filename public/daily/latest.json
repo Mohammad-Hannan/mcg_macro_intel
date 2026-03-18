@@ -1,5 +1,5 @@
 {
-  "date": "2026-03-17",
+  "date": "2026-03-18",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
@@ -82,6 +82,10 @@
     {
       "date": "2026-03-17",
       "mrg": 39.38
+    },
+    {
+      "date": "2026-03-18",
+      "mrg": 39.38
     }
   ],
   "overlay": {
@@ -91,7 +95,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 61.33,
+    "lpi": 57.33,
     "lfs": "STABLE",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -110,13 +114,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 6.9e-06,
-      "funding_delta": 5.6100000000000005e-06,
-      "basis_percent": 0.00032397408207343413,
-      "basis_delta": 0.0005814553431594329,
-      "open_interest": 973530620.0,
-      "oi_change": -0.04362989226375243,
-      "price_change": 0.0596784345139326
+      "funding": 9.74e-06,
+      "funding_delta": 8.45e-06,
+      "basis_percent": -0.00020942549856779982,
+      "basis_delta": 4.805576251819892e-05,
+      "open_interest": 986091360.0,
+      "oi_change": -0.031290561563453556,
+      "price_change": 0.058705727527607714
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -129,8 +133,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": -0.010389914152664626,
-    "intraday_range": 0.010498997838899807
+    "pct_change_24h": 0.0012819477931875934,
+    "intraday_range": 0.0012803065070862304
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -140,9 +144,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 28,
+    "value": 26,
     "classification": "fear",
-    "timestamp": "1773705600",
+    "timestamp": "1773792000",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_ADD",
@@ -163,5 +167,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-03-17T07:00:14.183055"
+  "pipeline_run": "2026-03-18T06:58:06.038468"
 }
