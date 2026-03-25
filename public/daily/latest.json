@@ -1,15 +1,15 @@
 {
-  "date": "2026-03-24",
+  "date": "2026-03-25",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
   "risk_regime": "NEUTRAL",
   "risk_engine": {
     "crs": 30,
-    "lrs": 3,
-    "mrg": 32.25
+    "lrs": 8,
+    "mrg": 36.0
   },
-  "mrg_change": -12.75,
+  "mrg_change": 3.75,
   "mrg_history": [
     {
       "date": "2026-03-05",
@@ -110,6 +110,10 @@
     {
       "date": "2026-03-24",
       "mrg": 32.25
+    },
+    {
+      "date": "2026-03-25",
+      "mrg": 36.0
     }
   ],
   "overlay": {
@@ -119,15 +123,15 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 57.0,
+    "lpi": 83.67,
     "lfs": "STABLE",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
-      "lrs": 3,
+      "lrs": 8,
       "liquidity_stress": false,
       "components": {
         "oi_compression": 0,
-        "funding_instability": 0,
+        "funding_instability": 5,
         "oi_price_divergence": 3,
         "volatility_expansion": 0
       }
@@ -138,13 +142,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 1.31e-05,
-      "funding_delta": 1.181e-05,
-      "basis_percent": -0.0003120523113147331,
-      "basis_delta": -5.457105022873437e-05,
-      "open_interest": 970964180.0,
-      "oi_change": -0.04615109339381921,
-      "price_change": 0.008482577101333181
+      "funding": 4.236e-05,
+      "funding_delta": 4.107e-05,
+      "basis_percent": -0.0003868716852130608,
+      "basis_delta": -0.00012939042412706204,
+      "open_interest": 935641250.0,
+      "oi_change": -0.08085138291286889,
+      "price_change": 0.016807804543113807
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -157,8 +161,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": -0.005510921490797218,
-    "intraday_range": 0.005541460042033253
+    "pct_change_24h": 0.007683788802990441,
+    "intraday_range": 0.00762519838898855
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -168,9 +172,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 11,
+    "value": 14,
     "classification": "extreme_fear",
-    "timestamp": "1774310400",
+    "timestamp": "1774396800",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_ADD_STRONG",
@@ -191,5 +195,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-03-24T07:00:17.022579"
+  "pipeline_run": "2026-03-25T06:58:38.101972"
 }
