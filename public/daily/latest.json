@@ -1,5 +1,5 @@
 {
-  "date": "2026-03-28",
+  "date": "2026-03-29",
   "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
@@ -126,6 +126,10 @@
     {
       "date": "2026-03-28",
       "mrg": 45.0
+    },
+    {
+      "date": "2026-03-29",
+      "mrg": 45.0
     }
   ],
   "overlay": {
@@ -135,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 56.67,
+    "lpi": 61.33,
     "lfs": "CLEANSED",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -154,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 0.0,
-      "funding_delta": -1.29e-06,
-      "basis_percent": 0.0003015272354475418,
-      "basis_delta": 0.0005590084965335406,
-      "open_interest": 994110440.0,
-      "oi_change": -0.023412834611685376,
-      "price_change": -0.05119585741259942
+      "funding": 7.89e-06,
+      "funding_delta": 6.600000000000001e-06,
+      "basis_percent": 0.000164947216890595,
+      "basis_delta": 0.0004224284779765937,
+      "open_interest": 994798020.0,
+      "oi_change": -0.02273737464651521,
+      "price_change": -0.04606053670538422
     },
     "liquidity_ok": false,
     "market_structure": "POST_PANIC_RESET",
@@ -173,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.0001587820936040183,
-    "intraday_range": 0.00015875688585330848
+    "pct_change_24h": 0.005489161726137785,
+    "intraday_range": 0.00545919532013101
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -184,9 +188,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 12,
+    "value": 9,
     "classification": "extreme_fear",
-    "timestamp": "1774656000",
+    "timestamp": "1774742400",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_HOLD",
@@ -207,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-03-28T06:54:51.129483"
+  "pipeline_run": "2026-03-29T06:59:29.929753"
 }
