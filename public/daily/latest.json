@@ -1,6 +1,6 @@
 {
-  "date": "2026-04-17",
-  "weekend_mode": false,
+  "date": "2026-04-18",
+  "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
   "risk_regime": "NEUTRAL",
@@ -11,10 +11,6 @@
   },
   "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-03-19",
-      "mrg": 37.62
-    },
     {
       "date": "2026-03-20",
       "mrg": 32.25
@@ -130,6 +126,10 @@
     {
       "date": "2026-04-17",
       "mrg": 35.0
+    },
+    {
+      "date": "2026-04-18",
+      "mrg": 35.0
     }
   ],
   "overlay": {
@@ -139,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 60.0,
+    "lpi": 53.33,
     "lfs": "EXPANSION",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 0.0,
-      "funding_delta": -1.29e-06,
-      "basis_percent": 0.0003802027748132337,
-      "basis_delta": 0.0006376840358992325,
-      "open_interest": 1025018070.0,
-      "oi_change": 0.006949983799688348,
-      "price_change": 0.07226640727813698
+      "funding": -2.148e-05,
+      "funding_delta": -2.277e-05,
+      "basis_percent": 9.076410409346109e-05,
+      "basis_delta": 0.0003482453651794598,
+      "open_interest": 1038381680.0,
+      "oi_change": 0.020078032237903054,
+      "price_change": 0.10320707215197117
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": -0.002495271664115344,
-    "intraday_range": 0.0025015136201691508
+    "pct_change_24h": -0.00010305145234701072,
+    "intraday_range": 0.00010306207304331973
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -188,12 +188,12 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 21,
-    "classification": "extreme_fear",
-    "timestamp": "1776384000",
+    "value": 26,
+    "classification": "fear",
+    "timestamp": "1776470400",
     "source": "alternative_me"
   },
-  "tactical_bias": "TACTICAL_ADD",
+  "tactical_bias": "TACTICAL_HOLD",
   "btc_structure": {
     "above_50dma": "yes",
     "above_200dma": "no",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-04-17T07:28:11.696234"
+  "pipeline_run": "2026-04-18T07:02:43.623877"
 }
