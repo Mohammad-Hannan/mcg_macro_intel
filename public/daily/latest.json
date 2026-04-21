@@ -1,5 +1,5 @@
 {
-  "date": "2026-04-20",
+  "date": "2026-04-21",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
@@ -11,10 +11,6 @@
   },
   "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-03-22",
-      "mrg": 45.0
-    },
     {
       "date": "2026-03-23",
       "mrg": 45.0
@@ -130,6 +126,10 @@
     {
       "date": "2026-04-20",
       "mrg": 35.0
+    },
+    {
+      "date": "2026-04-21",
+      "mrg": 35.0
     }
   ],
   "overlay": {
@@ -139,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 56.0,
+    "lpi": 54.67,
     "lfs": "EXPANSION",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": -2e-08,
-      "funding_delta": -1.31e-06,
-      "basis_percent": 0.00026068821689259646,
-      "basis_delta": 0.0005181694779785953,
-      "open_interest": 1029557110.0,
-      "oi_change": 0.011409013731195933,
-      "price_change": 0.0700062939863821
+      "funding": -1.56e-06,
+      "funding_delta": -2.85e-06,
+      "basis_percent": 0.00014423770373575654,
+      "basis_delta": 0.0004017189648217553,
+      "open_interest": 1028597140.0,
+      "oi_change": 0.010465965209184818,
+      "price_change": 0.09090518967786233
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.013089749714592465,
-    "intraday_range": 0.012920622006372198
+    "pct_change_24h": 0.005293228853565378,
+    "intraday_range": 0.005265358108103212
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -188,12 +188,12 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 29,
+    "value": 33,
     "classification": "fear",
-    "timestamp": "1776643200",
+    "timestamp": "1776729600",
     "source": "alternative_me"
   },
-  "tactical_bias": "TACTICAL_ADD",
+  "tactical_bias": "TACTICAL_HOLD",
   "btc_structure": {
     "above_50dma": "yes",
     "above_200dma": "no",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-04-20T08:01:21.710615"
+  "pipeline_run": "2026-04-21T07:44:09.145877"
 }
