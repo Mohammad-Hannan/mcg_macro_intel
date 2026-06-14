@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-13",
+  "date": "2026-06-14",
   "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
@@ -9,12 +9,8 @@
     "lrs": 0,
     "mrg": 45.0
   },
-  "mrg_change": -3.38,
+  "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-05-15",
-      "mrg": 35.0
-    },
     {
       "date": "2026-05-16",
       "mrg": 35.0
@@ -130,6 +126,10 @@
     {
       "date": "2026-06-13",
       "mrg": 45.0
+    },
+    {
+      "date": "2026-06-14",
+      "mrg": 45.0
     }
   ],
   "overlay": {
@@ -139,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 49.67,
+    "lpi": 56.67,
     "lfs": "CLEANSED",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -160,11 +160,11 @@
     "derivatives": {
       "funding": 0.0,
       "funding_delta": -1.29e-06,
-      "basis_percent": -0.0005328401949568243,
-      "basis_delta": -0.0002753589338708255,
-      "open_interest": 1008790910.0,
-      "oi_change": -0.008991138583758952,
-      "price_change": -0.08724323396463925
+      "basis_percent": 0.0003265636177028582,
+      "basis_delta": 0.0005840448787888569,
+      "open_interest": 996555530.0,
+      "oi_change": -0.02101084443419633,
+      "price_change": -0.08013389025576471
     },
     "liquidity_ok": false,
     "market_structure": "POST_PANIC_RESET",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": -5.2182181704078524e-05,
-    "intraday_range": 5.2184904826264384e-05
+    "pct_change_24h": -0.0010199567372530312,
+    "intraday_range": 0.0010209981111552267
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -188,9 +188,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 13,
+    "value": 18,
     "classification": "extreme_fear",
-    "timestamp": "1781308800",
+    "timestamp": "1781395200",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_HOLD",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-06-13T08:52:58.143297"
+  "pipeline_run": "2026-06-14T09:28:12.693274"
 }
