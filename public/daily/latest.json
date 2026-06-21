@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-20",
+  "date": "2026-06-21",
   "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
@@ -9,12 +9,8 @@
     "lrs": 3,
     "mrg": 53.75
   },
-  "mrg_change": 5.37,
+  "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-05-22",
-      "mrg": 37.62
-    },
     {
       "date": "2026-05-23",
       "mrg": 50.0
@@ -130,6 +126,10 @@
     {
       "date": "2026-06-20",
       "mrg": 53.75
+    },
+    {
+      "date": "2026-06-21",
+      "mrg": 53.75
     }
   ],
   "overlay": {
@@ -139,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 47.67,
+    "lpi": 65.67,
     "lfs": "BREAKING",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -158,16 +158,16 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": -3.82e-06,
-      "funding_delta": -5.11e-06,
-      "basis_percent": -0.00035504639272864987,
-      "basis_delta": -9.756513164265113e-05,
-      "open_interest": 1023336530.0,
-      "oi_change": 0.005298084457310386,
-      "price_change": -0.0934943068032271
+      "funding": 1.459e-05,
+      "funding_delta": 1.33e-05,
+      "basis_percent": -0.0004603261293594445,
+      "basis_delta": -0.00020284486827344575,
+      "open_interest": 1023640710.0,
+      "oi_change": 0.005596902648946939,
+      "price_change": -0.0832951879613206
     },
     "liquidity_ok": false,
-    "market_structure": "NEUTRAL",
+    "market_structure": "LEVERAGE_EXPANSION",
     "permissions": {
       "allow_carry": "False",
       "allow_vol_selling": false,
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": -0.0022865139674905477,
-    "intraday_range": 0.0022917540952393663
+    "pct_change_24h": -0.002643431899492125,
+    "intraday_range": 0.002650438152251417
   },
   "portfolio_signal": {
     "btc_allocation_target": "55%",
@@ -190,7 +190,7 @@
   "fear_greed": {
     "value": 23,
     "classification": "extreme_fear",
-    "timestamp": "1781913600",
+    "timestamp": "1782000000",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_HOLD",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-06-20T08:49:43.596269"
+  "pipeline_run": "2026-06-21T09:44:19.018332"
 }
