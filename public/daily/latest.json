@@ -1,5 +1,5 @@
 {
-  "date": "2026-06-27",
+  "date": "2026-06-28",
   "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
@@ -11,10 +11,6 @@
   },
   "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-05-29",
-      "mrg": 62.5
-    },
     {
       "date": "2026-05-30",
       "mrg": 56.25
@@ -130,6 +126,10 @@
     {
       "date": "2026-06-27",
       "mrg": 54.0
+    },
+    {
+      "date": "2026-06-28",
+      "mrg": 54.0
     }
   ],
   "overlay": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 7.68e-06,
-      "funding_delta": 6.39e-06,
-      "basis_percent": 0.00038929843452331647,
-      "basis_delta": 0.0006467796956093153,
-      "open_interest": 871665010.0,
-      "oi_change": -0.14369990794576412,
-      "price_change": -0.13650798191909366
+      "funding": 8.08e-06,
+      "funding_delta": 6.790000000000001e-06,
+      "basis_percent": 0.0004141266896368937,
+      "basis_delta": 0.0006716079507228924,
+      "open_interest": 872621370.0,
+      "oi_change": -0.1427604057899566,
+      "price_change": -0.13646506837557934
     },
     "liquidity_ok": false,
     "market_structure": "POST_PANIC_RESET",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.006388461362152158,
-    "intraday_range": 0.006347907997181666
+    "pct_change_24h": 0.007127206181782951,
+    "intraday_range": 0.007076768592920441
   },
   "portfolio_signal": {
     "btc_allocation_target": "55%",
@@ -188,9 +188,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 15,
+    "value": 18,
     "classification": "extreme_fear",
-    "timestamp": "1782518400",
+    "timestamp": "1782604800",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_HOLD",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-06-27T08:31:51.193450"
+  "pipeline_run": "2026-06-28T08:46:42.694059"
 }
