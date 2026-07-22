@@ -1,5 +1,5 @@
 {
-  "date": "2026-07-21",
+  "date": "2026-07-22",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
@@ -9,12 +9,8 @@
     "lrs": 15,
     "mrg": 48.12
   },
-  "mrg_change": 4.37,
+  "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-06-22",
-      "mrg": 56.25
-    },
     {
       "date": "2026-06-23",
       "mrg": 56.25
@@ -130,6 +126,10 @@
     {
       "date": "2026-07-21",
       "mrg": 48.12
+    },
+    {
+      "date": "2026-07-22",
+      "mrg": 48.12
     }
   ],
   "overlay": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 3.706e-05,
-      "funding_delta": 3.577e-05,
-      "basis_percent": 0.0014873312596261287,
-      "basis_delta": 0.0017448125207121274,
-      "open_interest": 757315480.0,
-      "oi_change": -0.25603378844116065,
-      "price_change": -0.05266922240659152
+      "funding": 7.27e-05,
+      "funding_delta": 7.141000000000001e-05,
+      "basis_percent": 0.0009467545254866318,
+      "basis_delta": 0.0012042357865726305,
+      "open_interest": 761050000.0,
+      "oi_change": -0.2523650971628697,
+      "price_change": -0.055687474967099616
     },
     "liquidity_ok": false,
     "market_structure": "POST_PANIC_RESET",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.015711790842191917,
-    "intraday_range": 0.015468749091870107
+    "pct_change_24h": 0.012587281118515531,
+    "intraday_range": 0.012430811005853715
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -188,12 +188,12 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 25,
-    "classification": "extreme_fear",
-    "timestamp": "1784592000",
+    "value": 33,
+    "classification": "fear",
+    "timestamp": "1784678400",
     "source": "alternative_me"
   },
-  "tactical_bias": "TACTICAL_ADD",
+  "tactical_bias": "TACTICAL_HOLD",
   "btc_structure": {
     "above_50dma": "yes",
     "above_200dma": "no",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-07-21T08:21:33.282227"
+  "pipeline_run": "2026-07-22T08:21:45.471342"
 }
