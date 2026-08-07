@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-06",
+  "date": "2026-08-07",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
@@ -11,10 +11,6 @@
   },
   "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-07-08",
-      "mrg": 62.5
-    },
     {
       "date": "2026-07-09",
       "mrg": 68.75
@@ -130,6 +126,10 @@
     {
       "date": "2026-08-06",
       "mrg": 43.75
+    },
+    {
+      "date": "2026-08-07",
+      "mrg": 43.75
     }
   ],
   "overlay": {
@@ -139,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 70.67,
+    "lpi": 61.33,
     "lfs": "CLEANSED",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 1.932e-05,
-      "funding_delta": 1.8030000000000002e-05,
-      "basis_percent": 0.000602177101829692,
-      "basis_delta": 0.0008596583629156907,
-      "open_interest": 728669200.0,
-      "oi_change": -0.28417511787345184,
-      "price_change": -0.07356811809807175
+      "funding": 1.035e-05,
+      "funding_delta": 9.06e-06,
+      "basis_percent": 0.00038130515306678285,
+      "basis_delta": 0.0006387864141527816,
+      "open_interest": 724505570.0,
+      "oi_change": -0.2882653551909734,
+      "price_change": -0.08089202952451793
     },
     "liquidity_ok": false,
     "market_structure": "POST_PANIC_RESET",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.0024212790335605117,
-    "intraday_range": 0.002415430602086659
+    "pct_change_24h": -0.00012119886110275536,
+    "intraday_range": 0.0001212135520472137
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -188,9 +188,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 25,
-    "classification": "extreme_fear",
-    "timestamp": "1785974400",
+    "value": 29,
+    "classification": "fear",
+    "timestamp": "1786060800",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_ADD",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-08-06T08:28:43.789155"
+  "pipeline_run": "2026-08-07T07:08:35.594075"
 }
