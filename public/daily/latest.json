@@ -1,6 +1,6 @@
 {
-  "date": "2026-08-07",
-  "weekend_mode": false,
+  "date": "2026-08-08",
+  "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
   "risk_regime": "NEUTRAL",
@@ -11,10 +11,6 @@
   },
   "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-07-09",
-      "mrg": 68.75
-    },
     {
       "date": "2026-07-10",
       "mrg": 68.75
@@ -130,6 +126,10 @@
     {
       "date": "2026-08-07",
       "mrg": 43.75
+    },
+    {
+      "date": "2026-08-08",
+      "mrg": 43.75
     }
   ],
   "overlay": {
@@ -139,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 61.33,
+    "lpi": 54.0,
     "lfs": "CLEANSED",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 1.035e-05,
-      "funding_delta": 9.06e-06,
-      "basis_percent": 0.00038130515306678285,
-      "basis_delta": 0.0006387864141527816,
-      "open_interest": 724505570.0,
-      "oi_change": -0.2882653551909734,
-      "price_change": -0.08089202952451793
+      "funding": 1.2e-07,
+      "funding_delta": -1.17e-06,
+      "basis_percent": -6.93000693000693e-05,
+      "basis_delta": 0.00018818119178592944,
+      "open_interest": 717439530.0,
+      "oi_change": -0.2952068414649939,
+      "price_change": -0.07113635063225954
     },
     "liquidity_ok": false,
     "market_structure": "POST_PANIC_RESET",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": -0.00012119886110275536,
-    "intraday_range": 0.0001212135520472137
+    "pct_change_24h": 0.010042155874912355,
+    "intraday_range": 0.009942313611864746
   },
   "portfolio_signal": {
     "btc_allocation_target": "60%",
@@ -188,12 +188,12 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 29,
+    "value": 30,
     "classification": "fear",
-    "timestamp": "1786060800",
+    "timestamp": "1786147200",
     "source": "alternative_me"
   },
-  "tactical_bias": "TACTICAL_ADD",
+  "tactical_bias": "TACTICAL_HOLD",
   "btc_structure": {
     "above_50dma": "yes",
     "above_200dma": "no",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-08-07T07:08:35.594075"
+  "pipeline_run": "2026-08-08T06:43:53.547242"
 }
