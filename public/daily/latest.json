@@ -1,20 +1,16 @@
 {
-  "date": "2026-08-21",
-  "weekend_mode": false,
+  "date": "2026-08-22",
+  "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
   "risk_regime": "NEUTRAL",
   "risk_engine": {
     "crs": 30,
-    "lrs": 8,
-    "mrg": 36.0
+    "lrs": 10,
+    "mrg": 37.5
   },
-  "mrg_change": 0.0,
+  "mrg_change": 1.5,
   "mrg_history": [
-    {
-      "date": "2026-07-23",
-      "mrg": 43.75
-    },
     {
       "date": "2026-07-24",
       "mrg": 43.75
@@ -130,24 +126,28 @@
     {
       "date": "2026-08-21",
       "mrg": 36.0
+    },
+    {
+      "date": "2026-08-22",
+      "mrg": 37.5
     }
   ],
   "overlay": {
-    "exposure_recommendation": 0.7,
+    "exposure_recommendation": 0.6875,
     "bear_regime": false,
     "regime_state": "LOW",
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 57.33,
+    "lpi": 83.67,
     "lfs": "STABLE",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
-      "lrs": 8,
-      "liquidity_stress": false,
+      "lrs": 10,
+      "liquidity_stress": true,
       "components": {
-        "oi_compression": 3,
-        "funding_instability": 0,
+        "oi_compression": 0,
+        "funding_instability": 5,
         "oi_price_divergence": 5,
         "volatility_expansion": 0
       }
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 9.33e-06,
-      "funding_delta": 8.040000000000001e-06,
-      "basis_percent": -3.3101621979477e-05,
-      "basis_delta": 0.00022437963910652175,
-      "open_interest": 848231820.0,
-      "oi_change": -0.16672003898684423,
-      "price_change": 0.08034845797333638
+      "funding": 5.592e-05,
+      "funding_delta": 5.463e-05,
+      "basis_percent": -0.0013399792853443812,
+      "basis_delta": -0.0010824980242583825,
+      "open_interest": 919665310.0,
+      "oi_change": -0.09654571357397108,
+      "price_change": 0.10488070034903016
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -177,20 +177,20 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.03464611523094889,
-    "intraday_range": 0.033485956909252344
+    "pct_change_24h": -0.013758850759159582,
+    "intraday_range": 0.013950797702722569
   },
   "portfolio_signal": {
-    "btc_allocation_target": "70%",
+    "btc_allocation_target": "69%",
     "risk_level": "Moderate",
     "action_guidance": "Neutral positioning appropriate.",
     "structural_regime": "Neutral / Structural Uptrend",
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 72,
+    "value": 71,
     "classification": "greed",
-    "timestamp": "1787270400",
+    "timestamp": "1787356800",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_TRIM",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-08-21T06:38:18.397371"
+  "pipeline_run": "2026-08-22T06:32:28.296849"
 }
