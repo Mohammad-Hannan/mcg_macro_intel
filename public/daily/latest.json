@@ -1,6 +1,6 @@
 {
-  "date": "2026-09-20",
-  "weekend_mode": true,
+  "date": "2026-09-21",
+  "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
   "risk_regime": "NEUTRAL",
@@ -9,12 +9,8 @@
     "lrs": 15,
     "mrg": 41.25
   },
-  "mrg_change": 3.75,
+  "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-08-22",
-      "mrg": 37.5
-    },
     {
       "date": "2026-08-23",
       "mrg": 39.75
@@ -130,6 +126,10 @@
     {
       "date": "2026-09-20",
       "mrg": 41.25
+    },
+    {
+      "date": "2026-09-21",
+      "mrg": 41.25
     }
   ],
   "overlay": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 7.642e-05,
-      "funding_delta": 7.513000000000001e-05,
-      "basis_percent": 0.0007157260574074535,
-      "basis_delta": 0.0009732073184934523,
-      "open_interest": 777154850.0,
-      "oi_change": -0.23654412880999334,
-      "price_change": 0.1491960862848315
+      "funding": 0.00023654,
+      "funding_delta": 0.00023525,
+      "basis_percent": 0.0007896380629117609,
+      "basis_delta": 0.0010471193239977596,
+      "open_interest": 795027410.0,
+      "oi_change": -0.21898661004112036,
+      "price_change": 0.21372375121588374
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": -0.011061939432678958,
-    "intraday_range": 0.011185674688597878
+    "pct_change_24h": 0.04534064965350542,
+    "intraday_range": 0.04337404239329475
   },
   "portfolio_signal": {
     "btc_allocation_target": "66%",
@@ -188,9 +188,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 71,
+    "value": 70,
     "classification": "greed",
-    "timestamp": "1789862400",
+    "timestamp": "1789948800",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_TRIM",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-09-20T10:33:00.879595"
+  "pipeline_run": "2026-09-21T11:52:56.052943"
 }
