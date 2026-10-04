@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-03",
+  "date": "2026-10-04",
   "weekend_mode": true,
   "data_health": "healthy",
   "health_warnings": [],
@@ -9,12 +9,8 @@
     "lrs": 10,
     "mrg": 37.5
   },
-  "mrg_change": -3.75,
+  "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-09-04",
-      "mrg": 36.0
-    },
     {
       "date": "2026-09-05",
       "mrg": 38.25
@@ -130,6 +126,10 @@
     {
       "date": "2026-10-03",
       "mrg": 37.5
+    },
+    {
+      "date": "2026-10-04",
+      "mrg": 37.5
     }
   ],
   "overlay": {
@@ -139,7 +139,7 @@
     "overlay_version": "MCG Overlay v2"
   },
   "phase2": {
-    "lpi": 52.67,
+    "lpi": 58.0,
     "lfs": "STABLE",
     "institutional_bias": "DISTRIBUTING",
     "liquidity_regime": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 0.0,
-      "funding_delta": -1.29e-06,
-      "basis_percent": -0.00021861668813443153,
-      "basis_delta": 3.886457295156721e-05,
-      "open_interest": 806702610.0,
-      "oi_change": -0.20751720984717245,
-      "price_change": 0.21049093093780397
+      "funding": 2.4e-07,
+      "funding_delta": -1.05e-06,
+      "basis_percent": 0.00035186901089621035,
+      "basis_delta": 0.0006093502719822091,
+      "open_interest": 798291540.0,
+      "oi_change": -0.21578001715576756,
+      "price_change": 0.2195886021628426
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.001370438667284945,
-    "intraday_range": 0.0013685631354455098
+    "pct_change_24h": 0.006094744023232767,
+    "intraday_range": 0.006057823141845205
   },
   "portfolio_signal": {
     "btc_allocation_target": "69%",
@@ -188,9 +188,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 67,
+    "value": 65,
     "classification": "greed",
-    "timestamp": "1790985600",
+    "timestamp": "1791072000",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_HOLD",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-10-03T11:02:14.189175"
+  "pipeline_run": "2026-10-04T11:43:42.210248"
 }
