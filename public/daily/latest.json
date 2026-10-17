@@ -1,22 +1,16 @@
 {
-  "date": "2026-10-16",
-  "weekend_mode": false,
-  "data_health": "degraded",
-  "health_warnings": [
-    "Phase II failure"
-  ],
-  "risk_regime": "NEUTRAL",
+  "date": "2026-10-17",
+  "weekend_mode": true,
+  "data_health": "healthy",
+  "health_warnings": [],
+  "risk_regime": "RISK_ON",
   "risk_engine": {
-    "crs": 30,
-    "lrs": 0,
-    "mrg": 30.0
+    "crs": 20,
+    "lrs": 8,
+    "mrg": 24.0
   },
-  "mrg_change": -9.75,
+  "mrg_change": -6.0,
   "mrg_history": [
-    {
-      "date": "2026-09-17",
-      "mrg": 27.5
-    },
     {
       "date": "2026-09-18",
       "mrg": 25.0
@@ -132,39 +126,78 @@
     {
       "date": "2026-10-16",
       "mrg": 30.0
+    },
+    {
+      "date": "2026-10-17",
+      "mrg": 24.0
     }
   ],
   "overlay": {
-    "exposure_recommendation": null,
-    "bear_regime": null,
-    "regime_state": "INSUFFICIENT_DATA",
+    "exposure_recommendation": 0.8,
+    "bear_regime": false,
+    "regime_state": "LOW",
     "overlay_version": "MCG Overlay v2"
   },
-  "phase2": null,
+  "phase2": {
+    "lpi": 69.33,
+    "lfs": "STABLE",
+    "institutional_bias": "DISTRIBUTING",
+    "liquidity_regime": {
+      "lrs": 8,
+      "liquidity_stress": false,
+      "components": {
+        "oi_compression": 3,
+        "funding_instability": 0,
+        "oi_price_divergence": 5,
+        "volatility_expansion": 0
+      }
+    },
+    "etf_flows": {
+      "flow_7d": -652.1,
+      "flow_30d": -1611.7,
+      "flow_acceleration": 959.6
+    },
+    "derivatives": {
+      "funding": 1.48e-05,
+      "funding_delta": 1.3510000000000001e-05,
+      "basis_percent": 0.00010430727696649896,
+      "basis_delta": 0.00036178853805249767,
+      "open_interest": 836321630.0,
+      "oi_change": -0.17842028699081475,
+      "price_change": 0.1656748869943354
+    },
+    "liquidity_ok": false,
+    "market_structure": "NEUTRAL",
+    "permissions": {
+      "allow_carry": "False",
+      "allow_vol_selling": false,
+      "favor_spot": false
+    }
+  },
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0,
-    "intraday_range": 0
+    "pct_change_24h": -0.00041622235063563153,
+    "intraday_range": 0.0004163956638176202
   },
   "portfolio_signal": {
-    "btc_allocation_target": null,
-    "risk_level": "UNKNOWN",
-    "action_guidance": "Insufficient data.",
-    "structural_regime": "UNKNOWN",
+    "btc_allocation_target": "80%",
+    "risk_level": "Low",
+    "action_guidance": "Favorable risk/reward. Gradual accumulation permitted.",
+    "structural_regime": "Neutral / Structural Uptrend",
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 63,
+    "value": 55,
     "classification": "greed",
-    "timestamp": "1792108800",
+    "timestamp": "1792195200",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_HOLD",
   "btc_structure": {
-    "above_50dma": "unknown",
-    "above_200dma": "unknown",
-    "volatility": "unknown"
+    "above_50dma": "yes",
+    "above_200dma": "yes",
+    "volatility": "low"
   },
   "institutional_flows": {
     "etf_flow_regime": "negative"
@@ -178,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-10-16T10:36:14.425773"
+  "pipeline_run": "2026-10-17T10:05:25.839965"
 }
