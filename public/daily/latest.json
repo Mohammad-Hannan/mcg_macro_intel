@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-03",
+  "date": "2026-11-04",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
@@ -9,12 +9,8 @@
     "lrs": 15,
     "mrg": 41.25
   },
-  "mrg_change": 1.5,
+  "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-10-05",
-      "mrg": 41.25
-    },
     {
       "date": "2026-10-06",
       "mrg": 37.5
@@ -130,6 +126,10 @@
     {
       "date": "2026-11-03",
       "mrg": 41.25
+    },
+    {
+      "date": "2026-11-04",
+      "mrg": 41.25
     }
   ],
   "overlay": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 6.006e-05,
-      "funding_delta": 5.8769999999999995e-05,
-      "basis_percent": 0.0022246008614686236,
-      "basis_delta": 0.0024820821225546223,
-      "open_interest": 662428670.0,
-      "oi_change": -0.3492480200617838,
-      "price_change": 0.10920066372947303
+      "funding": 8.469e-05,
+      "funding_delta": 8.340000000000001e-05,
+      "basis_percent": 0.00022352505396533445,
+      "basis_delta": 0.0004810063150513332,
+      "open_interest": 635762690.0,
+      "oi_change": -0.3754439564212304,
+      "price_change": 0.11991474509355153
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.010855331877600774,
-    "intraday_range": 0.010738759083792605
+    "pct_change_24h": 0.011806884411637904,
+    "intraday_range": 0.01166910859526674
   },
   "portfolio_signal": {
     "btc_allocation_target": "66%",
@@ -188,12 +188,12 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 26,
+    "value": 34,
     "classification": "fear",
-    "timestamp": "1793664000",
+    "timestamp": "1793750400",
     "source": "alternative_me"
   },
-  "tactical_bias": "TACTICAL_ADD",
+  "tactical_bias": "TACTICAL_HOLD",
   "btc_structure": {
     "above_50dma": "no",
     "above_200dma": "yes",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-11-03T13:32:29.314751"
+  "pipeline_run": "2026-11-04T13:42:51.289398"
 }
