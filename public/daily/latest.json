@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-04",
+  "date": "2026-11-05",
   "weekend_mode": false,
   "data_health": "healthy",
   "health_warnings": [],
@@ -11,10 +11,6 @@
   },
   "mrg_change": 0.0,
   "mrg_history": [
-    {
-      "date": "2026-10-06",
-      "mrg": 37.5
-    },
     {
       "date": "2026-10-07",
       "mrg": 36.0
@@ -130,6 +126,10 @@
     {
       "date": "2026-11-04",
       "mrg": 41.25
+    },
+    {
+      "date": "2026-11-05",
+      "mrg": 41.25
     }
   ],
   "overlay": {
@@ -158,13 +158,13 @@
       "flow_acceleration": 959.6
     },
     "derivatives": {
-      "funding": 8.469e-05,
-      "funding_delta": 8.340000000000001e-05,
-      "basis_percent": 0.00022352505396533445,
-      "basis_delta": 0.0004810063150513332,
-      "open_interest": 635762690.0,
-      "oi_change": -0.3754439564212304,
-      "price_change": 0.11991474509355153
+      "funding": 0.00017003,
+      "funding_delta": 0.00016874,
+      "basis_percent": 0.0002195486080618249,
+      "basis_delta": 0.0004770298691478236,
+      "open_interest": 635910000.0,
+      "oi_change": -0.37529924306791995,
+      "price_change": 0.1401985466613263
     },
     "liquidity_ok": false,
     "market_structure": "NEUTRAL",
@@ -177,8 +177,8 @@
   "macro_regime": "REGIME_UNCLEAR",
   "shock": {
     "shock_mode": false,
-    "pct_change_24h": 0.011806884411637904,
-    "intraday_range": 0.01166910859526674
+    "pct_change_24h": -0.009122413908382632,
+    "intraday_range": 0.009206398485977223
   },
   "portfolio_signal": {
     "btc_allocation_target": "66%",
@@ -188,9 +188,9 @@
     "overlay_version": "MCG Overlay v2"
   },
   "fear_greed": {
-    "value": 34,
-    "classification": "fear",
-    "timestamp": "1793750400",
+    "value": 50,
+    "classification": "neutral",
+    "timestamp": "1793836800",
     "source": "alternative_me"
   },
   "tactical_bias": "TACTICAL_HOLD",
@@ -211,5 +211,5 @@
     "pmi_3m_avg": 53.4,
     "pmi_trend": "FALLING"
   },
-  "pipeline_run": "2026-11-04T13:42:51.289398"
+  "pipeline_run": "2026-11-05T13:55:35.029645"
 }
